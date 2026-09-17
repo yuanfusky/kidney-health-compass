@@ -228,7 +228,7 @@ function DailyPage() {
                 <div className="pb-5">
                   <p className="text-[16px] font-medium">{t(m.drug_name)}</p>
                   <p className="text-[15px] text-muted-foreground">
-                    {t(m.dose)} · {t(m.frequency)}
+                    {m.dose ? t(m.dose) : ""} · {m.frequency ? t(m.frequency) : ""}
                   </p>
                   <p className="kt-num text-[13px] text-muted-foreground">
                     {t("{date} 开始", { date: m.start_date })}

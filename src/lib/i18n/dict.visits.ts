@@ -2,6 +2,7 @@ export const VISITS_DICT: Record<string, string> = {
   "复诊准备 — KidneyTrack": "Visit prep — KidneyTrack",
   "生成近 3/6/12 个月的关键指标变化、治疗变化，以及想向医生确认的问题。":
     "Generate key metric changes, treatment changes, and questions to confirm with your doctor over the last 3/6/12 months.",
+  "生成一页式就诊摘要": "Generate a one-page visit summary",
   "一页式就诊摘要，方便与医生沟通。": "A one-page visit summary to help you talk with your doctor.",
 
   "最近3个月": "Last 3 months",
