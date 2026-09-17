@@ -64,9 +64,7 @@ function Landing() {
             <Link to="/auth">{checking ? "进入 KidneyTrack" : "登录 / 注册"}</Link>
           </Button>
           <Button asChild variant="outline" size="lg" className="h-13 px-7 text-base">
-            <Link to="/auth" search={{ demo: true }}>
-              查看演示档案
-            </Link>
+            <Link to="/auth">查看演示档案</Link>
           </Button>
         </div>
 
