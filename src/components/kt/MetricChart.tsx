@@ -33,7 +33,7 @@ function mergeSeries(series: ChartSeries[]): Row[] {
     s.points.forEach((p) => {
       const row = byDate.get(p.date) ?? { date: p.date };
       row[`v${idx}`] = p.value;
-      if (idx === 0 && p.reportId) row.reportId = p.reportId;
+      if (idx === 0 && p.reportId) row["reportId"] = p.reportId;
       byDate.set(p.date, row);
     });
   });
@@ -41,8 +41,8 @@ function mergeSeries(series: ChartSeries[]): Row[] {
 }
 
 function shortDate(d: string) {
-  const [y, m, day] = d.split("-");
-  return `${y.slice(2)}/${m}/${day}`;
+  const parts = d.split("-");
+  return `${(parts[0] ?? "").slice(2)}/${parts[1] ?? ""}/${parts[2] ?? ""}`;
 }
 
 export function MetricChart({
@@ -78,7 +78,10 @@ export function MetricChart({
           onClick={(state) => {
             const payload = state?.activePayload?.[0]?.payload as Row | undefined;
             if (payload && onPointClick) {
-              onPointClick({ date: payload.date, reportId: payload.reportId as string | undefined });
+              onPointClick({
+                date: payload["date"] as string,
+                reportId: (payload["reportId"] as string | null | undefined) ?? null,
+              });
             }
           }}
         >

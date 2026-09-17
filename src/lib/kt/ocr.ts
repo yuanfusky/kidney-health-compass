@@ -172,11 +172,12 @@ export const mockExtractionProvider: ExtractionProvider = {
     // Simulated processing latency of a real OCR / LLM pipeline.
     await new Promise((resolve) => setTimeout(resolve, 2200));
     const type = reportType && PRESETS[reportType] ? reportType : "肾功能";
+    const preset = PRESETS[type] ?? [];
     return {
       report_date: new Date().toISOString().slice(0, 10),
       hospital: "北京大学第一医院",
       report_type: type,
-      fields: PRESETS[type].map((f) => ({ ...f })),
+      fields: preset.map((f) => ({ ...f })),
     };
   },
 };

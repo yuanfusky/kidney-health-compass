@@ -102,7 +102,7 @@ function DailyPage() {
               { key: "sys", label: "收缩压", unit: "mmHg" },
               { key: "dia", label: "舒张压", unit: "mmHg" },
             ]}
-            onSubmit={(v) => addMeasurement("blood_pressure", Number(v.sys), Number(v.dia), "mmHg")}
+            onSubmit={(v) => addMeasurement("blood_pressure", Number(v["sys"]), Number(v["dia"]), "mmHg")}
           />
           <QuickCard
             icon={<Scale className="size-5 text-primary" />}
@@ -110,7 +110,7 @@ function DailyPage() {
             latest={latest("weight") ? `${latest("weight")!.value} kg` : "暂无记录"}
             latestDate={latest("weight")?.timestamp.slice(0, 10)}
             fields={[{ key: "w", label: "体重", unit: "kg" }]}
-            onSubmit={(v) => addMeasurement("weight", Number(v.w), undefined, "kg")}
+            onSubmit={(v) => addMeasurement("weight", Number(v["w"]), undefined, "kg")}
           />
           <QuickCard
             icon={<Activity className="size-5 text-primary" />}
@@ -118,7 +118,7 @@ function DailyPage() {
             latest={latest("heart_rate") ? `${latest("heart_rate")!.value} bpm` : "暂无记录"}
             latestDate={latest("heart_rate")?.timestamp.slice(0, 10)}
             fields={[{ key: "hr", label: "心率", unit: "bpm" }]}
-            onSubmit={(v) => addMeasurement("heart_rate", Number(v.hr), undefined, "bpm")}
+            onSubmit={(v) => addMeasurement("heart_rate", Number(v["hr"]), undefined, "bpm")}
           />
           <QuickCard
             icon={<Dumbbell className="size-5 text-primary" />}
@@ -127,7 +127,7 @@ function DailyPage() {
             latestDate={latest("exercise")?.timestamp.slice(0, 10)}
             fields={[{ key: "min", label: "时长", unit: "分钟" }]}
             noteLabel="运动方式"
-            onSubmit={(v) => addMeasurement("exercise", Number(v.min), undefined, "min", v.note)}
+            onSubmit={(v) => addMeasurement("exercise", Number(v["min"]), undefined, "min", v["note"])}
           />
         </section>
 
@@ -246,9 +246,9 @@ function QuickCard({
   icon: React.ReactNode;
   title: string;
   latest: string;
-  latestDate?: string;
+  latestDate?: string | undefined;
   fields: Array<{ key: string; label: string; unit: string }>;
-  noteLabel?: string;
+  noteLabel?: string | undefined;
   onSubmit: (values: Record<string, string>) => Promise<boolean>;
 }) {
   const [open, setOpen] = useState(false);
@@ -292,7 +292,7 @@ function QuickCard({
               <div className="space-y-1.5">
                 <Label className="text-[15px]">{noteLabel}</Label>
                 <Input
-                  value={values.note ?? ""}
+                  value={values["note"] ?? ""}
                   onChange={(e) => setValues((p) => ({ ...p, note: e.target.value }))}
                   className="h-12 text-base"
                 />
@@ -326,7 +326,7 @@ function SymptomCard({
   latest,
 }: {
   onSubmit: (type: string, value: number, value2?: number, unit?: string, note?: string) => Promise<boolean>;
-  latest?: { note: string | null; timestamp: string };
+  latest?: { note: string | null; timestamp: string } | undefined;
 }) {
   const [open, setOpen] = useState(false);
   const [note, setNote] = useState("");
