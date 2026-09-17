@@ -9,7 +9,8 @@ export const ACCOUNT_DICT: Record<string, string> = {
   "把分散在各家医院的肾脏检查资料整理成一条属于你自己的健康时间线。":
     "Organize kidney test results scattered across hospitals into one health timeline that belongs to you.",
   "KidneyTrack · 慢性肾病健康记录": "KidneyTrack · Chronic Kidney Disease Health Record",
-  "属于你自己的<br/>肾脏健康时间线": "Your own\nkidney health timeline",
+  "属于你自己的": "Your own",
+  "肾脏健康时间线": "Kidney health timeline",
   "多家医院、多年检查、纸质报告和手机照片，都可以整理到一处。KidneyTrack 帮助 CKD 与 IgA 肾病患者和家属看清长期变化，并为每一次复诊做好准备。":
     "Multiple hospitals, years of check-ups, paper reports and phone photos can all be organized in one place. KidneyTrack helps CKD and IgA nephropathy patients and their families see long-term changes and prepare for every follow-up.",
   "进入 KidneyTrack": "Enter KidneyTrack",

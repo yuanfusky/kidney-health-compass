@@ -263,6 +263,7 @@ function QuickCard({
   noteLabel?: string | undefined;
   onSubmit: (values: Record<string, string>) => Promise<boolean>;
 }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [values, setValues] = useState<Record<string, string>>({});
 
@@ -273,24 +274,24 @@ function QuickCard({
         {title}
       </p>
       <p className="kt-num mt-2 text-[22px] font-semibold">{latest}</p>
-      <p className="text-[13px] text-muted-foreground">{latestDate ? `最近记录 ${latestDate}` : "\u00a0"}</p>
+      <p className="text-[13px] text-muted-foreground">{latestDate ? t("最近记录 {date}", { date: latestDate }) : "\u00a0"}</p>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button variant="outline" className="mt-3 h-11 w-full gap-1.5 text-[15px]">
             <Plus className="size-4" />
-            快速记录
+            {t("快速记录")}
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
-            <DialogTitle className="text-xl">记录{title}</DialogTitle>
-            <DialogDescription className="text-[15px]">记录会保存到你的时间线。</DialogDescription>
+            <DialogTitle className="text-xl">{t("记录{title}", { title })}</DialogTitle>
+            <DialogDescription className="text-[15px]">{t("记录会保存到你的时间线。")}</DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
             {fields.map((f) => (
               <div key={f.key} className="space-y-1.5">
                 <Label className="text-[15px]">
-                  {f.label}（{f.unit}）
+                  {t("{label}（{unit}）", { label: f.label, unit: f.unit })}
                 </Label>
                 <Input
                   inputMode="decimal"
@@ -316,7 +317,7 @@ function QuickCard({
             onClick={async () => {
               const missing = fields.some((f) => !values[f.key] || Number.isNaN(Number(values[f.key])));
               if (missing) {
-                toast.error("请填写有效数值");
+                toast.error(t("请填写有效数值"));
                 return;
               }
               if (await onSubmit(values)) {
@@ -325,7 +326,7 @@ function QuickCard({
               }
             }}
           >
-            保存
+            {t("保存")}
           </Button>
         </DialogContent>
       </Dialog>
