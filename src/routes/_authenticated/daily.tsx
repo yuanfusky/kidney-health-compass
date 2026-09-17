@@ -231,7 +231,7 @@ function DailyPage() {
                     {m.dose ? t(m.dose) : ""} · {m.frequency ? t(m.frequency) : ""}
                   </p>
                   <p className="kt-num text-[13px] text-muted-foreground">
-                    {t("{date} 开始", { date: m.start_date })}
+                    {t("{date} 开始", { date: m.start_date ?? "" })}
                     {m.stop_date ? t(" · {date} 停用", { date: m.stop_date }) : t(" · 正在服用")}
                     {m.doctor ? t(" · {doctor}", { doctor: t(m.doctor) }) : ""}
                   </p>
@@ -563,6 +563,7 @@ function AddFoodDialog({ items }: { items: Array<{ id: string; name: string; ser
 }
 
 function AddMedicationDialog() {
+  const t = useT();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({
@@ -582,22 +583,22 @@ function AddMedicationDialog() {
       <DialogTrigger asChild>
         <Button variant="outline" className="h-11 gap-1.5 text-[15px]">
           <Plus className="size-4" />
-          添加药物
+          {t("添加药物")}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[88vh] overflow-y-auto sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl">添加药物</DialogTitle>
+          <DialogTitle className="text-xl">{t("添加药物")}</DialogTitle>
           <DialogDescription className="text-[15px]">
-            请按医生处方填写。KidneyTrack 不会建议用药或调整剂量。
+            {t("请按医生处方填写。KidneyTrack 不会建议用药或调整剂量。")}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-3">
           {[
-            { k: "drug_name", label: "药物名称", ph: "例如 氯沙坦钾 Losartan" },
-            { k: "dose", label: "剂量", ph: "例如 50 mg" },
-            { k: "frequency", label: "频次", ph: "例如 每日一次" },
-            { k: "doctor", label: "开药医生", ph: "例如 李医生 (肾内科)" },
+            { k: "drug_name", label: t("药物名称"), ph: t("例如 氯沙坦钾 Losartan") },
+            { k: "dose", label: t("剂量"), ph: t("例如 50 mg") },
+            { k: "frequency", label: t("频次"), ph: t("例如 每日一次") },
+            { k: "doctor", label: t("开药医生"), ph: t("例如 李医生 (肾内科)") },
           ].map((f) => (
             <div key={f.k} className="space-y-1.5">
               <Label className="text-[15px]">{f.label}</Label>
@@ -611,7 +612,7 @@ function AddMedicationDialog() {
           ))}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label className="text-[15px]">开始日期</Label>
+              <Label className="text-[15px]">{t("开始日期")}</Label>
               <Input
                 type="date"
                 value={form.start_date}
@@ -620,7 +621,7 @@ function AddMedicationDialog() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-[15px]">停用日期</Label>
+              <Label className="text-[15px]">{t("停用日期")}</Label>
               <Input
                 type="date"
                 value={form.stop_date}
@@ -630,7 +631,7 @@ function AddMedicationDialog() {
             </div>
           </div>
           <div className="space-y-1.5">
-            <Label className="text-[15px]">备注（可选）</Label>
+            <Label className="text-[15px]">{t("备注（可选）")}</Label>
             <Textarea value={form.notes} onChange={(e) => set("notes", e.target.value)} className="min-h-20 text-base" />
           </div>
         </div>
@@ -638,7 +639,7 @@ function AddMedicationDialog() {
           className="h-12 text-base"
           onClick={async () => {
             if (!form.drug_name.trim()) {
-              toast.error("请填写药物名称");
+              toast.error(t("请填写药物名称"));
               return;
             }
             const { error } = await supabase.from("medications").insert({
@@ -652,7 +653,7 @@ function AddMedicationDialog() {
               notes: form.notes || null,
             });
             if (error) {
-              toast.error("保存失败，请重试");
+              toast.error(t("保存失败，请重试"));
               return;
             }
             await supabase.from("events").insert({
@@ -663,11 +664,11 @@ function AddMedicationDialog() {
               date: form.start_date || today(),
             });
             await queryClient.invalidateQueries();
-            toast.success("药物已添加");
+            toast.success(t("药物已添加"));
             setOpen(false);
           }}
         >
-          保存
+          {t("保存")}
         </Button>
       </DialogContent>
     </Dialog>

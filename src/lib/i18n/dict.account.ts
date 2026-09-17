@@ -120,6 +120,7 @@ export const ACCOUNT_DICT: Record<string, string> = {
     "Fill in as written on the original report. Tap the info icon next to each classification field to see its explanation.",
   "穿刺日期": "Biopsy date",
   "医院": "Hospital",
+  "备注（可选）": "Note (optional)",
   "上传病理报告文件（可选）": "Upload pathology report file (optional)",
   "请填写穿刺日期": "Please enter the biopsy date",
   "文件上传失败，请重试": "File upload failed. Please try again.",
@@ -140,6 +141,7 @@ export const ACCOUNT_DICT: Record<string, string> = {
   "只能查看，不能修改任何记录": "Can only view; cannot modify any records",
   "移除成员": "Remove member",
   "成员已移除": "Member removed",
+  "权限已更新": "Permission updated",
   "添加家属": "Add family member",
   "家属管理者可以帮你上传报告和记录数据；仅查看成员只能查看。":
     "Family caregivers can help you upload reports and record data; view-only members can only view.",
