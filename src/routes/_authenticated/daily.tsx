@@ -92,7 +92,7 @@ function DailyPage() {
         {/* Quick entry */}
         <section className="grid gap-3 sm:grid-cols-2">
           <QuickCard
-            icon={<HeartPulse className="size-5 text-primary" />}
+            icon={<HeartPulse className="size-4 text-primary" />}
             title={t("血压")}
             latest={
               latest("blood_pressure")
@@ -107,7 +107,7 @@ function DailyPage() {
             onSubmit={(v) => addMeasurement("blood_pressure", Number(v["sys"]), Number(v["dia"]), "mmHg")}
           />
           <QuickCard
-            icon={<Scale className="size-5 text-primary" />}
+            icon={<Scale className="size-4 text-primary" />}
             title={t("体重")}
             latest={latest("weight") ? `${latest("weight")!.value} kg` : t("暂无记录")}
             latestDate={latest("weight")?.timestamp.slice(0, 10)}
@@ -115,7 +115,7 @@ function DailyPage() {
             onSubmit={(v) => addMeasurement("weight", Number(v["w"]), undefined, "kg")}
           />
           <QuickCard
-            icon={<Activity className="size-5 text-primary" />}
+            icon={<Activity className="size-4 text-primary" />}
             title={t("心率")}
             latest={latest("heart_rate") ? `${latest("heart_rate")!.value} bpm` : t("暂无记录")}
             latestDate={latest("heart_rate")?.timestamp.slice(0, 10)}
@@ -123,7 +123,7 @@ function DailyPage() {
             onSubmit={(v) => addMeasurement("heart_rate", Number(v["hr"]), undefined, "bpm")}
           />
           <QuickCard
-            icon={<Dumbbell className="size-5 text-primary" />}
+            icon={<Dumbbell className="size-4 text-primary" />}
             title={t("运动")}
             latest={latest("exercise") ? t("{n} 分钟", { n: latest("exercise")!.value }) : t("暂无记录")}
             latestDate={latest("exercise")?.timestamp.slice(0, 10)}
