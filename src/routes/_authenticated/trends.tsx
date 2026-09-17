@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Pill } from "lucide-react";
 import { PageHeader } from "@/components/kt/PageHeader";
+import { t, useT } from "@/lib/i18n";
 import { MetricChart, type ChartSeries, type ChartMarker } from "@/components/kt/MetricChart";
 import { METRICS, METRIC_CATEGORIES } from "@/lib/kt/metrics";
 import {
@@ -19,10 +20,10 @@ import { Label } from "@/components/ui/label";
 export const Route = createFileRoute("/_authenticated/trends")({
   head: () => ({
     meta: [
-      { title: "指标趋势 — KidneyTrack" },
-      { name: "description", content: "肾功能、尿蛋白、电解质、营养与心血管指标的长期趋势，可叠加用药事件。" },
-      { property: "og:title", content: "指标趋势 — KidneyTrack" },
-      { property: "og:description", content: "选择一到两项指标叠加对比，看清数月至数年的变化。" },
+      { title: `${t("指标趋势")} — KidneyTrack` },
+      { name: "description", content: t("肾功能、尿蛋白、电解质、营养与心血管指标的长期趋势，可叠加用药事件。") },
+      { property: "og:title", content: `${t("指标趋势")} — KidneyTrack` },
+      { property: "og:description", content: t("选择一到两项指标叠加对比，看清数月至数年的变化。") },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -38,6 +39,7 @@ const RANGES = [
 ] as const;
 
 function TrendsPage() {
+  const t = useT();
   const navigate = useNavigate();
   const { data: labs } = useLabs();
   const { data: measurements } = useMeasurements();
@@ -74,13 +76,13 @@ function TrendsPage() {
       .filter((m) => m.start_date)
       .map((m) => ({
         date: m.start_date!,
-        label: `${m.drug_name.split(" ")[0]} 开始`,
+        label: t("{name} 开始", { name: t(m.drug_name.split(" ")[0] ?? "") }),
       }));
   }, [medications, showMeds]);
 
   return (
     <>
-      <PageHeader title="指标趋势" subtitle="选择一到两项指标叠加对比" />
+      <PageHeader title={t("指标趋势")} subtitle={t("选择一到两项指标叠加对比")} />
 
       <div className="mx-auto max-w-4xl space-y-5 px-4 py-5 md:px-8">
         <div className="flex flex-wrap gap-1.5">
@@ -96,7 +98,7 @@ function TrendsPage() {
                 category === c ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
               }`}
             >
-              {c}
+              {t(c)}
             </button>
           ))}
         </div>
@@ -113,7 +115,7 @@ function TrendsPage() {
                     range === r.value ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
                   }`}
                 >
-                  {r.label}
+                  {t(r.label)}
                 </button>
               ))}
             </div>
@@ -121,7 +123,7 @@ function TrendsPage() {
 
           <div className="mt-3 space-y-2.5">
             <div>
-              <p className="mb-1.5 text-[14px] text-muted-foreground">主指标</p>
+              <p className="mb-1.5 text-[14px] text-muted-foreground">{t("主指标")}</p>
               <div className="flex flex-wrap gap-1.5">
                 {categoryMetrics.map((m) => (
                   <button
@@ -133,13 +135,13 @@ function TrendsPage() {
                         : "border-border text-muted-foreground"
                     }`}
                   >
-                    {m.labelZh.split(" ")[0]}
+                    {t(m.labelZh.split(" ")[0] ?? "")}
                   </button>
                 ))}
               </div>
             </div>
             <div>
-              <p className="mb-1.5 text-[14px] text-muted-foreground">叠加第二项（可选）</p>
+              <p className="mb-1.5 text-[14px] text-muted-foreground">{t("叠加第二项（可选）")}</p>
               <div className="flex flex-wrap gap-1.5">
                 <button
                   onClick={() => setSecondary(null)}
@@ -149,7 +151,7 @@ function TrendsPage() {
                       : "border-border text-muted-foreground"
                   }`}
                 >
-                  不叠加
+                  {t("不叠加")}
                 </button>
                 {METRICS.filter((m) => m.key !== primary).map((m) => (
                   <button
@@ -161,7 +163,7 @@ function TrendsPage() {
                         : "border-border text-muted-foreground"
                     }`}
                   >
-                    {m.labelZh.split(" ")[0]}
+                    {t(m.labelZh.split(" ")[0] ?? "")}
                   </button>
                 ))}
               </div>
@@ -172,7 +174,7 @@ function TrendsPage() {
             <Switch id="meds" checked={showMeds} onCheckedChange={setShowMeds} />
             <Label htmlFor="meds" className="flex items-center gap-1.5 text-[15px]">
               <Pill className="size-4 text-info" />
-              在图上标注用药事件
+              {t("在图上标注用药事件")}
             </Label>
           </div>
 
@@ -195,11 +197,11 @@ function TrendsPage() {
                 <li key={s.metric.key} className="flex items-center gap-2 text-[15px]">
                   <span className="size-2.5 rounded-full" style={{ background: s.color }} />
                   <span className="font-medium">
-                    {s.metric.labelZh} {s.metric.canonical}
+                    {t(s.metric.labelZh)} {s.metric.canonical}
                   </span>
                   <span className="kt-num ml-auto text-muted-foreground">
                     {previous ? `${previous.value.toFixed(d)} → ` : ""}
-                    {latest ? `${latest.value.toFixed(d)} ${s.metric.unit}` : "暂无数据"}
+                    {latest ? `${latest.value.toFixed(d)} ${s.metric.unit}` : t("暂无数据")}
                   </span>
                 </li>
               );
@@ -208,7 +210,7 @@ function TrendsPage() {
         </section>
 
         <p className="rounded-xl bg-surface p-4 text-[14px] leading-relaxed text-surface-foreground">
-          趋势图用于帮助你理解数月到数年间的变化，单次数值的小幅波动通常不代表病情变化。具体解读建议在下次复诊时向医生确认。
+          {t("趋势图用于帮助你理解数月到数年间的变化，单次数值的小幅波动通常不代表病情变化。具体解读建议在下次复诊时向医生确认。")}
         </p>
       </div>
     </>

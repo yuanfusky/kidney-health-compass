@@ -1,1 +1,38 @@
-export const REPORTS_DICT: Record<string, string> = {};
+/** Reports list and report detail page strings. */
+export const REPORTS_DICT: Record<string, string> = {
+  "检查报告 — KidneyTrack": "Lab Reports — KidneyTrack",
+  "按时间排列的化验单与病理报告，上传后识别结果由本人确认再入档。":
+    "Lab results and pathology reports listed by date. Uploaded results are confirmed by you before being filed.",
+  "集中管理来自不同医院的肾脏检查报告。": "Manage kidney-related reports from different hospitals in one place.",
+  "检查报告": "Lab Reports",
+  "共 {n} 份报告": "{n} reports total",
+  "上传检查报告": "Upload report",
+  "未填写医院": "Hospital not specified",
+  "已提取 {n} 项指标": "{n} values extracted",
+  "已确认": "Confirmed",
+  "待确认": "Pending confirmation",
+  "还没有报告，点击上方按钮上传第一份检查报告。": "No reports yet. Tap the button above to upload your first report.",
+
+  "报告详情 — KidneyTrack": "Report Detail — KidneyTrack",
+  "查看原始报告、AI 识别值与你确认后的数值。": "View the original report, AI-extracted values and the values you confirmed.",
+  "每一项数值都保留来源报告与确认记录。": "Every value keeps a record of its source report and confirmation.",
+  "报告详情": "Report Detail",
+  "返回报告列表": "Back to reports",
+  "报告类型": "Report type",
+  "检查日期": "Test date",
+  "来源": "Source",
+  "手动录入": "Manual entry",
+  "PDF 报告": "PDF report",
+  "报告照片": "Report photo",
+  "查看原始报告文件": "View original report file",
+  "这份报告没有附带原始文件（演示数据或手动录入）。": "This report has no attached original file (demo data or manual entry).",
+  "检查数值": "Test values",
+  "测量日期 {date}": "Measured on {date}",
+  " · 参考范围 {min} – {max} {unit}": " · Reference range {min} – {max} {unit}",
+  "AI 识别值 {value}": "AI-extracted value {value}",
+  " · 可信度 {pct}%": " · Confidence {pct}%",
+  " · 已由本人确认": " · Confirmed by you",
+  "由本人手动录入": "Manually entered by you",
+  "数据来源完整保留：原始报告、AI 识别值与你确认的数值分别留档。指标含义与处理方式，建议在下次复诊时向医生确认。":
+    "Full data provenance is kept: the original report, AI-extracted values and your confirmed values are all filed separately. Please confirm the meaning and management of these values with your doctor at your next visit.",
+};
