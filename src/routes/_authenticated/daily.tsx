@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { t, useT } from "@/lib/i18n";
 import { useMemo, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Activity, Dumbbell, HeartPulse, Pill, Plus, Scale, Utensils, X } from "lucide-react";
@@ -30,10 +31,10 @@ import {
 export const Route = createFileRoute("/_authenticated/daily")({
   head: () => ({
     meta: [
-      { title: "日常记录 — KidneyTrack" },
-      { name: "description", content: "记录血压、体重、心率、运动、药物与症状，并跟踪每日蛋白摄入。" },
-      { property: "og:title", content: "日常记录 — KidneyTrack" },
-      { property: "og:description", content: "每日蛋白预算由你或医生设定，KidneyTrack 只负责记录。" },
+      { title: `${t("日常记录")} — KidneyTrack` },
+      { name: "description", content: t("记录血压、体重、心率、运动、药物与症状，并跟踪每日蛋白摄入。") },
+      { property: "og:title", content: `${t("日常记录")} — KidneyTrack` },
+      { property: "og:description", content: t("每日蛋白预算由你或医生设定，KidneyTrack 只负责记录。") },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -44,6 +45,7 @@ export const Route = createFileRoute("/_authenticated/daily")({
 const today = () => new Date().toISOString().slice(0, 10);
 
 function DailyPage() {
+  const t = useT();
   const queryClient = useQueryClient();
   const { data: measurements } = useMeasurements();
   const { data: medications } = useMedications();
@@ -74,59 +76,59 @@ function DailyPage() {
       timestamp: new Date().toISOString(),
     });
     if (error) {
-      toast.error("保存失败，请重试");
+      toast.error(t("保存失败，请重试"));
       return false;
     }
     await queryClient.invalidateQueries();
-    toast.success("已记录");
+    toast.success(t("已记录"));
     return true;
   }
 
   return (
     <>
-      <PageHeader title="日常记录" subtitle="血压 · 体重 · 心率 · 运动 · 药物 · 症状" />
+      <PageHeader title={t("日常记录")} subtitle={t("血压 · 体重 · 心率 · 运动 · 药物 · 症状")} />
 
       <div className="mx-auto max-w-4xl space-y-5 px-4 py-5 md:px-8">
         {/* Quick entry */}
         <section className="grid gap-3 sm:grid-cols-2">
           <QuickCard
             icon={<HeartPulse className="size-5 text-primary" />}
-            title="血压"
+            title={t("血压")}
             latest={
               latest("blood_pressure")
                 ? `${latest("blood_pressure")!.value} / ${latest("blood_pressure")!.value2} mmHg`
-                : "暂无记录"
+                : t("暂无记录")
             }
             latestDate={latest("blood_pressure")?.timestamp.slice(0, 10)}
             fields={[
-              { key: "sys", label: "收缩压", unit: "mmHg" },
-              { key: "dia", label: "舒张压", unit: "mmHg" },
+              { key: "sys", label: t("收缩压"), unit: "mmHg" },
+              { key: "dia", label: t("舒张压"), unit: "mmHg" },
             ]}
             onSubmit={(v) => addMeasurement("blood_pressure", Number(v["sys"]), Number(v["dia"]), "mmHg")}
           />
           <QuickCard
             icon={<Scale className="size-5 text-primary" />}
-            title="体重"
-            latest={latest("weight") ? `${latest("weight")!.value} kg` : "暂无记录"}
+            title={t("体重")}
+            latest={latest("weight") ? `${latest("weight")!.value} kg` : t("暂无记录")}
             latestDate={latest("weight")?.timestamp.slice(0, 10)}
-            fields={[{ key: "w", label: "体重", unit: "kg" }]}
+            fields={[{ key: "w", label: t("体重"), unit: "kg" }]}
             onSubmit={(v) => addMeasurement("weight", Number(v["w"]), undefined, "kg")}
           />
           <QuickCard
             icon={<Activity className="size-5 text-primary" />}
-            title="心率"
-            latest={latest("heart_rate") ? `${latest("heart_rate")!.value} bpm` : "暂无记录"}
+            title={t("心率")}
+            latest={latest("heart_rate") ? `${latest("heart_rate")!.value} bpm` : t("暂无记录")}
             latestDate={latest("heart_rate")?.timestamp.slice(0, 10)}
-            fields={[{ key: "hr", label: "心率", unit: "bpm" }]}
+            fields={[{ key: "hr", label: t("心率"), unit: "bpm" }]}
             onSubmit={(v) => addMeasurement("heart_rate", Number(v["hr"]), undefined, "bpm")}
           />
           <QuickCard
             icon={<Dumbbell className="size-5 text-primary" />}
-            title="运动"
-            latest={latest("exercise") ? `${latest("exercise")!.value} 分钟` : "暂无记录"}
+            title={t("运动")}
+            latest={latest("exercise") ? t("{n} 分钟", { n: latest("exercise")!.value }) : t("暂无记录")}
             latestDate={latest("exercise")?.timestamp.slice(0, 10)}
-            fields={[{ key: "min", label: "时长", unit: "分钟" }]}
-            noteLabel="运动方式"
+            fields={[{ key: "min", label: t("时长"), unit: t("分钟") }]}
+            noteLabel={t("运动方式")}
             onSubmit={(v) => addMeasurement("exercise", Number(v["min"]), undefined, "min", v["note"])}
           />
         </section>

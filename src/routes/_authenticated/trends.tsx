@@ -76,7 +76,7 @@ function TrendsPage() {
       .filter((m) => m.start_date)
       .map((m) => ({
         date: m.start_date!,
-        label: t("{name} 开始", { name: t(m.drug_name.split(" ")[0] ?? "") }),
+        label: t("{name} 开始", { name: t(m.drug_name) }),
       }));
   }, [medications, showMeds]);
 

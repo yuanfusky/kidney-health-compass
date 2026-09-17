@@ -137,4 +137,9 @@ export const CORE_DICT: Record<string, string> = {
   "1份 (100g)": "1 serving (100 g)",
   "1块 (100g)": "1 block (100 g)",
   "1杯 (250ml)": "1 cup (250 ml)",
+
+  // ---- language switcher
+  "界面语言": "Interface language",
+  "检验项目的英文名称在两种语言下都会保留。":
+    "English biomarker names are kept in both languages.",
 };

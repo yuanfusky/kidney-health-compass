@@ -14,14 +14,15 @@ import {
   requireMetric,
 } from "@/lib/kt/data";
 import { Button } from "@/components/ui/button";
+import { t, useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/home")({
   head: () => ({
     meta: [
-      { title: "肾脏健康概览 — KidneyTrack" },
-      { name: "description", content: "查看 eGFR、肌酐、尿蛋白、血压与体重的最新数值和长期趋势。" },
-      { property: "og:title", content: "肾脏健康概览 — KidneyTrack" },
-      { property: "og:description", content: "最新指标、长期趋势与最近事件，集中在一页。" },
+      { title: t("肾脏健康概览 — KidneyTrack") },
+      { name: "description", content: t("查看 eGFR、肌酐、尿蛋白、血压与体重的最新数值和长期趋势。") },
+      { property: "og:title", content: t("肾脏健康概览 — KidneyTrack") },
+      { property: "og:description", content: t("最新指标、长期趋势与最近事件，集中在一页。") },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -53,14 +54,15 @@ const EVENT_ICONS: Record<string, typeof Activity> = {
 };
 
 function ChangeBadge({ diff, unit, decimals }: { diff: number | null; unit: string; decimals: number }) {
+  const t = useT();
   if (diff === null) {
-    return <span className="text-[13px] text-muted-foreground">暂无对比</span>;
+    return <span className="text-[13px] text-muted-foreground">{t("暂无对比")}</span>;
   }
   const rounded = Number(diff.toFixed(decimals));
   if (rounded === 0) {
     return (
       <span className="inline-flex items-center gap-1 text-[13px] text-muted-foreground">
-        <Minus className="size-3.5" />与上次相同
+        <Minus className="size-3.5" />{t("与上次相同")}
       </span>
     );
   }
@@ -69,13 +71,13 @@ function ChangeBadge({ diff, unit, decimals }: { diff: number | null; unit: stri
   return (
     <span className="inline-flex items-center gap-1 text-[13px] text-surface-foreground">
       <Icon className="size-3.5" />
-      {up ? "+" : ""}
-      {rounded} {unit} 较上次
+      {t("{value} {unit} 较上次", { value: `${up ? "+" : ""}${rounded}`, unit })}
     </span>
   );
 }
 
 function HomePage() {
+  const t = useT();
   const navigate = useNavigate();
   const { data: patient } = usePatient();
   const { data: labs } = useLabs();
@@ -131,8 +133,8 @@ function HomePage() {
   return (
     <>
       <PageHeader
-        title="肾脏健康概览"
-        subtitle={patient ? `${patient.name} · ${patient.diagnosis ?? ""}` : "加载中…"}
+        title={t("肾脏健康概览")}
+        subtitle={patient ? `${t(patient.name)} · ${patient.diagnosis ? t(patient.diagnosis) : ""}` : t("加载中…")}
       />
 
       <div className="mx-auto max-w-4xl space-y-6 px-4 py-5 md:px-8">
@@ -140,14 +142,14 @@ function HomePage() {
           {cards.map(({ metric, latest, extra, diff }) => (
             <div key={metric.key} className="kt-card p-4">
               <p className="text-[14px] font-medium text-muted-foreground">
-                {metric.key === "sbp" ? "血压 Blood Pressure" : `${metric.labelZh.split(" ")[0]} ${metric.canonical}`}
+                {metric.key === "sbp" ? t("血压 Blood Pressure") : `${t(metric.labelZh.split(" ")[0] ?? "")} ${metric.canonical}`}
               </p>
               <p className="kt-num mt-2 text-[28px] font-semibold leading-none">
                 {latest ? latest.value.toFixed(metric.decimals ?? 0) : "—"}
                 {extra ? <span className="text-[20px] font-medium"> {extra}</span> : null}
               </p>
               <p className="mt-1 text-[13px] text-muted-foreground">
-                {metric.unit} · {latest ? latest.date : "暂无记录"}
+                {metric.unit} · {latest ? latest.date : t("暂无记录")}
               </p>
               <div className="mt-2">
                 <ChangeBadge diff={diff} unit={metric.unit} decimals={metric.decimals ?? 0} />
@@ -158,7 +160,7 @@ function HomePage() {
 
         <section className="kt-card p-4 md:p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-[18px] font-semibold">肾功能趋势</h2>
+            <h2 className="text-[18px] font-semibold">{t("肾功能趋势")}</h2>
             <div className="flex gap-1.5">
               {RANGES.map((r) => (
                 <button
@@ -168,7 +170,7 @@ function HomePage() {
                     range === r.value ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
                   }`}
                 >
-                  {r.label}
+                  {t(r.label)}
                 </button>
               ))}
             </div>
@@ -185,7 +187,7 @@ function HomePage() {
                     : "border-border text-muted-foreground"
                 }`}
               >
-                {o.label}
+                {t(o.label)}
               </button>
             ))}
           </div>
@@ -199,12 +201,12 @@ function HomePage() {
             />
           </div>
           <p className="mt-2 text-[13px] text-muted-foreground">
-            点击化验类曲线上的数据点，可以打开对应的原始报告。
+            {t("点击化验类曲线上的数据点，可以打开对应的原始报告。")}
           </p>
         </section>
 
         <section className="kt-card p-4 md:p-5">
-          <h2 className="text-[18px] font-semibold">最近事件</h2>
+          <h2 className="text-[18px] font-semibold">{t("最近事件")}</h2>
           <ol className="mt-4 space-y-0">
             {(events ?? []).slice(0, 8).map((e, idx, arr) => {
               const Icon = EVENT_ICONS[e.event_type] ?? Activity;
@@ -218,9 +220,9 @@ function HomePage() {
                   </div>
                   <div className="pb-5">
                     <p className="kt-num text-[13px] text-muted-foreground">{e.date}</p>
-                    <p className="text-[16px] font-medium">{e.title}</p>
+                    <p className="text-[16px] font-medium">{t(e.title)}</p>
                     {e.description ? (
-                      <p className="text-[15px] text-muted-foreground">{e.description}</p>
+                      <p className="text-[15px] text-muted-foreground">{t(e.description)}</p>
                     ) : null}
                   </div>
                 </li>
@@ -228,7 +230,7 @@ function HomePage() {
             })}
           </ol>
           <Button variant="outline" className="h-11 w-full text-[15px]" onClick={() => navigate({ to: "/reports" })}>
-            查看全部报告
+            {t("查看全部报告")}
           </Button>
         </section>
       </div>

@@ -1,4 +1,6 @@
-/** Canonical (English) biomarker names + patient-facing Chinese labels. */
+/** Canonical (English) biomarker names + patient-facing labels (EN default, ZH switchable). */
+import { getLang, t } from "@/lib/i18n";
+
 
 export type MetricSource = "lab" | "measurement";
 
@@ -141,9 +143,14 @@ export function metricByCanonical(canonical: string): MetricDef | undefined {
   return METRICS.find((m) => m.canonical.toLowerCase() === canonical.toLowerCase());
 }
 
+/** Patient-facing label: English name in EN mode, Chinese + English name in ZH mode. */
+export function metricLabel(m: MetricDef): string {
+  return getLang() === "zh" ? `${m.labelZh} ${m.canonical}` : t(m.labelZh);
+}
+
 export function labelFor(canonical: string): string {
   const m = metricByCanonical(canonical);
-  return m ? `${m.labelZh} ${m.canonical}` : canonical;
+  return m ? metricLabel(m) : canonical;
 }
 
 export function formatValue(value: number | null | undefined, decimals = 0): string {
