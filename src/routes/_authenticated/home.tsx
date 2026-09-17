@@ -57,22 +57,33 @@ const EVENT_ICONS: Record<string, typeof Activity> = {
 function ChangeBadge({ diff, unit, decimals }: { diff: number | null; unit: string; decimals: number }) {
   const t = useT();
   if (diff === null) {
-    return <span className="text-[13px] text-muted-foreground">{t("暂无对比")}</span>;
+    return (
+      <span className="rounded-md bg-muted px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground">
+        {t("暂无对比")}
+      </span>
+    );
   }
   const rounded = Number(diff.toFixed(decimals));
   if (rounded === 0) {
     return (
-      <span className="inline-flex items-center gap-1 text-[13px] text-muted-foreground">
-        <Minus className="size-3.5" />{t("与上次相同")}
+      <span
+        className="inline-flex items-center gap-0.5 rounded-md bg-muted px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground"
+        title={t("与上次相同")}
+      >
+        <Minus className="size-3" />
+        {t("与上次相同")}
       </span>
     );
   }
   const up = rounded > 0;
   const Icon = up ? ArrowUpRight : ArrowDownRight;
   return (
-    <span className="inline-flex items-center gap-1 text-[13px] text-surface-foreground">
-      <Icon className="size-3.5" />
-      {t("{value} {unit} 较上次", { value: `${up ? "+" : ""}${rounded}`, unit })}
+    <span
+      className="kt-num inline-flex items-center gap-0.5 rounded-md bg-surface px-1.5 py-0.5 text-[11px] font-semibold text-surface-foreground"
+      title={t("{value} {unit} 较上次", { value: `${up ? "+" : ""}${rounded}`, unit })}
+    >
+      <Icon className="size-3" />
+      {`${up ? "+" : ""}${rounded}`}
     </span>
   );
 }
