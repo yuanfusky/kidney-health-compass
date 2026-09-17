@@ -84,7 +84,6 @@ export const ACCOUNT_DICT: Record<string, string> = {
   "结构化保存活检信息，方便复诊时与医生沟通。":
     "Keep biopsy information structured to make it easier to discuss with your doctor at your next visit.",
   "肾穿刺活检记录": "Kidney biopsy records",
-  "返回个人中心_biopsy_aria": "Back to profile",
   "M": "M",
   "M — 系膜细胞增生 (Mesangial hypercellularity)": "M — Mesangial hypercellularity",
   "描述肾小球系膜区细胞数量是否增多。常见记录为 M0 或 M1。":

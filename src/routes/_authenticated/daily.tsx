@@ -141,12 +141,16 @@ function DailyPage() {
             <div>
               <h2 className="flex items-center gap-2 text-[18px] font-semibold">
                 <Utensils className="size-5 text-primary" />
-                每日蛋白预算
+                {t("每日蛋白预算")}
               </h2>
               <p className="mt-1 text-[14px] text-muted-foreground">
                 {target
-                  ? `${target.source === "doctor" ? "医生建议目标" : "自行设定目标"} ${proteinTarget} g / 天 · 自 ${target.start_date}`
-                  : "还没有设定目标"}
+                  ? t("{source} {target} g / 天 · 自 {date}", {
+                      source: target.source === "doctor" ? t("医生建议目标") : t("自行设定目标"),
+                      target: proteinTarget,
+                      date: target.start_date,
+                    })
+                  : t("还没有设定目标")}
               </p>
             </div>
             <TargetDialog current={proteinTarget} />
@@ -160,23 +164,29 @@ function DailyPage() {
             value={proteinTarget ? Math.min((proteinToday / proteinTarget) * 100, 100) : 0}
             className="mt-3 h-3"
           />
-          <p className="mt-2 text-[15px] text-muted-foreground">今日还剩 {remaining.toFixed(1)} g</p>
+          <p className="mt-2 text-[15px] text-muted-foreground">{t("今日还剩 {n} g", { n: remaining.toFixed(1) })}</p>
 
           <ul className="mt-4 divide-y divide-border">
             {(foodLogs ?? []).map((l) => (
               <li key={l.id} className="flex items-center gap-3 py-2.5">
                 <div className="min-w-0 flex-1">
                   <p className="text-[16px] font-medium">
-                    {l.food_items?.name} × {Number(l.amount)}
+                    {t("{name} × {amount}", {
+                      name: l.food_items?.name ? t(l.food_items.name) : "",
+                      amount: Number(l.amount),
+                    })}
                   </p>
                   <p className="text-[13px] text-muted-foreground">
-                    {l.food_items?.serving_size} · 蛋白 {((l.food_items?.protein_g ?? 0) * Number(l.amount)).toFixed(1)}{" "}
-                    g · 钾 {Math.round((l.food_items?.potassium_mg ?? 0) * Number(l.amount))} mg · 磷{" "}
-                    {Math.round((l.food_items?.phosphorus_mg ?? 0) * Number(l.amount))} mg
+                    {t("{serving} · 蛋白 {protein} g · 钾 {potassium} mg · 磷 {phosphorus} mg", {
+                      serving: l.food_items?.serving_size ? t(l.food_items.serving_size) : "",
+                      protein: ((l.food_items?.protein_g ?? 0) * Number(l.amount)).toFixed(1),
+                      potassium: Math.round((l.food_items?.potassium_mg ?? 0) * Number(l.amount)),
+                      phosphorus: Math.round((l.food_items?.phosphorus_mg ?? 0) * Number(l.amount)),
+                    })}
                   </p>
                 </div>
                 <button
-                  aria-label="删除记录"
+                  aria-label={t("删除记录")}
                   className="text-muted-foreground hover:text-destructive"
                   onClick={async () => {
                     await supabase.from("food_logs").delete().eq("id", l.id);
@@ -192,7 +202,7 @@ function DailyPage() {
           <AddFoodDialog items={foodItems ?? []} />
 
           <p className="mt-3 text-[13px] leading-relaxed text-muted-foreground">
-            蛋白目标由你本人或医生设定，KidneyTrack 只做记录，不会替你决定营养目标。饮食方案的调整建议在下次复诊时向医生确认。
+            {t("蛋白目标由你本人或医生设定，KidneyTrack 只做记录，不会替你决定营养目标。饮食方案的调整建议在下次复诊时向医生确认。")}
           </p>
         </section>
 
@@ -201,7 +211,7 @@ function DailyPage() {
           <div className="flex items-center justify-between gap-3">
             <h2 className="flex items-center gap-2 text-[18px] font-semibold">
               <Pill className="size-5 text-primary" />
-              药物
+              {t("药物")}
             </h2>
             <AddMedicationDialog />
           </div>
@@ -216,16 +226,16 @@ function DailyPage() {
                   {idx < arr.length - 1 ? <span className="w-px flex-1 bg-border" /> : null}
                 </div>
                 <div className="pb-5">
-                  <p className="text-[16px] font-medium">{m.drug_name}</p>
+                  <p className="text-[16px] font-medium">{t(m.drug_name)}</p>
                   <p className="text-[15px] text-muted-foreground">
-                    {m.dose} · {m.frequency}
+                    {t(m.dose)} · {t(m.frequency)}
                   </p>
                   <p className="kt-num text-[13px] text-muted-foreground">
-                    {m.start_date} 开始
-                    {m.stop_date ? ` · ${m.stop_date} 停用` : " · 正在服用"}
-                    {m.doctor ? ` · ${m.doctor}` : ""}
+                    {t("{date} 开始", { date: m.start_date })}
+                    {m.stop_date ? t(" · {date} 停用", { date: m.stop_date }) : t(" · 正在服用")}
+                    {m.doctor ? t(" · {doctor}", { doctor: t(m.doctor) }) : ""}
                   </p>
-                  {m.notes ? <p className="text-[14px] text-muted-foreground">备注：{m.notes}</p> : null}
+                  {m.notes ? <p className="text-[14px] text-muted-foreground">{t("备注：{notes}", { notes: t(m.notes) })}</p> : null}
                 </div>
               </li>
             ))}
