@@ -153,18 +153,23 @@ function HomePage() {
         <section className="grid grid-cols-2 gap-3 md:grid-cols-3">
           {cards.map(({ metric, latest, extra, diff }) => (
             <div key={metric.key} className="kt-card p-4">
-              <p className="text-[14px] font-medium text-muted-foreground">
-                {metric.key === "sbp" ? t("血压 Blood Pressure") : metricLabel(metric)}
-              </p>
-              <p className="kt-num mt-2 text-[28px] font-semibold leading-none">
-                {latest ? latest.value.toFixed(metric.decimals ?? 0) : "—"}
-                {extra ? <span className="text-[20px] font-medium"> {extra}</span> : null}
-              </p>
-              <p className="mt-1 text-[13px] text-muted-foreground">
-                {metric.unit} · {latest ? latest.date : t("暂无记录")}
-              </p>
-              <div className="mt-2">
+              <div className="flex items-start justify-between gap-2">
+                <p className="kt-eyebrow leading-tight">
+                  {metric.key === "sbp" ? t("血压 Blood Pressure") : metricLabel(metric)}
+                </p>
                 <ChangeBadge diff={diff} unit={metric.unit} decimals={metric.decimals ?? 0} />
+              </div>
+              <div className="mt-3 flex flex-wrap items-baseline gap-x-1.5">
+                <span className="kt-num text-[30px] font-bold leading-none">
+                  {latest ? latest.value.toFixed(metric.decimals ?? 0) : "—"}
+                  {extra ? <span className="text-[21px] font-semibold"> {extra}</span> : null}
+                </span>
+                <span className="text-[12px] leading-tight text-muted-foreground">{metric.unit}</span>
+              </div>
+              <div className="mt-3 border-t border-border/60 pt-2">
+                <p className="kt-num text-[12px] text-muted-foreground">
+                  {latest ? latest.date : t("暂无记录")}
+                </p>
               </div>
             </div>
           ))}
@@ -173,13 +178,15 @@ function HomePage() {
         <section className="kt-card p-4 md:p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-[18px] font-semibold">{t("肾功能趋势")}</h2>
-            <div className="flex gap-1.5">
+            <div className="kt-segment">
               {RANGES.map((r) => (
                 <button
                   key={r.label}
                   onClick={() => setRange(r.value)}
-                  className={`rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors ${
-                    range === r.value ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                  className={`rounded-full px-3 py-1 text-[13px] font-semibold transition-colors ${
+                    range === r.value
+                      ? "bg-card text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   {t(r.label)}
@@ -193,16 +200,17 @@ function HomePage() {
               <button
                 key={o.key}
                 onClick={() => setMetricKey(o.key)}
-                className={`rounded-lg border px-3 py-1.5 text-[14px] font-medium transition-colors ${
+                className={`rounded-full px-3 py-1.5 text-[14px] font-medium transition-colors ${
                   metricKey === o.key
-                    ? "border-primary bg-accent text-accent-foreground"
-                    : "border-border text-muted-foreground"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted/70 text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {t(o.label)}
               </button>
             ))}
           </div>
+
 
           <div className="mt-4">
             <MetricChart
