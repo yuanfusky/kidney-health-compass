@@ -154,6 +154,18 @@ export function MetricChart({
               }}
             />
           ))}
+          {series.length === 1 ? (
+            <Area
+              yAxisId="left"
+              type="monotone"
+              dataKey="v0"
+              stroke="none"
+              fill="url(#ktAreaFill)"
+              connectNulls
+              activeDot={false}
+              legendType="none"
+            />
+          ) : null}
           {series.map((s, idx) => (
             <Line
               key={s.metric.key}
@@ -162,12 +174,14 @@ export function MetricChart({
               dataKey={`v${idx}`}
               stroke={s.color}
               strokeWidth={2.4}
+              strokeLinecap="round"
               connectNulls
-              dot={{ r: 3.5, strokeWidth: 2, fill: "var(--color-card)" }}
-              activeDot={{ r: 6, cursor: onPointClick ? "pointer" : "default" }}
+              dot={{ r: 3, strokeWidth: 2, fill: "var(--color-card)" }}
+              activeDot={{ r: 6, strokeWidth: 3, stroke: "var(--color-card)", cursor: onPointClick ? "pointer" : "default" }}
             />
           ))}
-        </LineChart>
+        </ComposedChart>
+
       </ResponsiveContainer>
     </div>
   );
