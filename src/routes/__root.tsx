@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "@/components/ui/sonner";
+import { LanguageProvider } from "@/lib/i18n";
 
 function NotFoundComponent() {
   return (
@@ -79,13 +80,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "KidneyTrack 肾脏健康记录" },
+      { title: "KidneyTrack — Kidney Health Record" },
       {
         name: "description",
-        content: "患者自己掌握的慢性肾病健康档案：报告、趋势、用药与复诊准备。",
+        content:
+          "A patient-owned chronic kidney disease record: reports, trends, medications and visit preparation.",
       },
-      { property: "og:title", content: "KidneyTrack 肾脏健康记录" },
-      { property: "og:description", content: "患者自己掌握的慢性肾病健康档案。" },
+      { property: "og:title", content: "KidneyTrack — Kidney Health Record" },
+      { property: "og:description", content: "A patient-owned chronic kidney disease health record." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -111,7 +113,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="zh-CN">
+    <html lang="en">
       <head>
         <HeadContent />
       </head>
@@ -138,9 +140,11 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
-      <Toaster position="top-center" />
+      <LanguageProvider>
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+        <Toaster position="top-center" />
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }

@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { Home, FileText, TrendingUp, ClipboardList, Stethoscope } from "lucide-react";
 
+import { useT } from "@/lib/i18n";
+
 const TABS = [
   { to: "/home", label: "首页", Icon: Home },
   { to: "/reports", label: "报告", Icon: FileText },
@@ -10,6 +12,7 @@ const TABS = [
 ] as const;
 
 export function BottomNav() {
+  const t = useT();
   return (
     <nav
       className="kt-no-print fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card/95 backdrop-blur md:hidden"
@@ -24,7 +27,7 @@ export function BottomNav() {
               activeProps={{ className: "text-primary" }}
             >
               <Icon className="size-6" strokeWidth={1.8} />
-              <span className="text-[13px] font-medium">{label}</span>
+              <span className="text-[13px] font-medium">{t(label)}</span>
             </Link>
           </li>
         ))}
@@ -35,11 +38,12 @@ export function BottomNav() {
 }
 
 export function SideNav() {
+  const t = useT();
   return (
     <nav className="kt-no-print hidden w-56 shrink-0 flex-col gap-1 border-r border-border bg-card px-3 py-6 md:flex">
       <div className="mb-5 px-3">
         <p className="text-lg font-semibold tracking-tight">KidneyTrack</p>
-        <p className="text-sm text-muted-foreground">肾脏健康记录</p>
+        <p className="text-sm text-muted-foreground">{t("肾脏健康记录")}</p>
       </div>
       {TABS.map(({ to, label, Icon }) => (
         <Link
@@ -49,7 +53,7 @@ export function SideNav() {
           activeProps={{ className: "bg-accent text-accent-foreground" }}
         >
           <Icon className="size-5" strokeWidth={1.8} />
-          {label}
+          {t(label)}
         </Link>
       ))}
     </nav>

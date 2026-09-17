@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Camera, FileUp, Keyboard, Loader2, Plus, ShieldCheck, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { useT } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { DEMO_PATIENT_ID, qk } from "@/lib/kt/data";
 import { extractionProvider, confidenceLabel, type ExtractedField } from "@/lib/kt/ocr";
@@ -32,6 +33,7 @@ interface DraftField extends ExtractedField {
 }
 
 export function UploadFlow({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
+  const t = useT();
   const queryClient = useQueryClient();
   const fileRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState<Step>("choose");
@@ -101,7 +103,7 @@ export function UploadFlow({ open, onOpenChange }: { open: boolean; onOpenChange
   async function save() {
     const valid = fields.filter((f) => f.confirmed.trim() !== "" && !Number.isNaN(Number(f.confirmed)));
     if (valid.length === 0) {
-      toast.error("请至少确认一项检查数值");
+      toast.error(t("请至少确认一项检查数值"));
       return;
     }
     setSaving(true);
@@ -151,16 +153,16 @@ export function UploadFlow({ open, onOpenChange }: { open: boolean; onOpenChange
       await supabase.from("events").insert({
         patient_id: DEMO_PATIENT_ID,
         event_type: "lab",
-        title: `${reportType}检查`,
-        description: `${hospital} · 已确认 ${valid.length} 项指标`,
+        title: t("{type}检查", { type: reportType }),
+        description: t("{hospital} · 已确认 {count} 项指标", { hospital, count: valid.length }),
         date: reportDate,
       });
 
       await queryClient.invalidateQueries();
-      toast.success("已保存到你的健康时间线");
+      toast.success(t("已保存到你的健康时间线"));
       close(false);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "保存失败，请重试");
+      toast.error(err instanceof Error ? err.message : t("保存失败，请重试"));
     } finally {
       setSaving(false);
     }
@@ -183,22 +185,22 @@ export function UploadFlow({ open, onOpenChange }: { open: boolean; onOpenChange
         {step === "choose" && (
           <>
             <DialogHeader>
-              <DialogTitle className="text-xl">上传检查报告</DialogTitle>
+              <DialogTitle className="text-xl">{t("上传检查报告")}</DialogTitle>
               <DialogDescription className="text-[15px]">
-                支持照片、PDF 或手动录入。识别结果需要你本人确认后才会保存。
+                {t("支持照片、PDF 或手动录入。识别结果需要你本人确认后才会保存。")}
               </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-2">
-              <Label className="text-[15px]">报告类型</Label>
+              <Label className="text-[15px]">{t("报告类型")}</Label>
               <Select value={reportType} onValueChange={setReportType}>
                 <SelectTrigger className="h-12 text-base">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {REPORT_TYPES.map((t) => (
-                    <SelectItem key={t} value={t} className="text-base">
-                      {t}
+                  {REPORT_TYPES.map((rt) => (
+                    <SelectItem key={rt} value={rt} className="text-base">
+                      {t(rt)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -208,15 +210,15 @@ export function UploadFlow({ open, onOpenChange }: { open: boolean; onOpenChange
             <div className="mt-2 space-y-2.5">
               <Button variant="outline" className="h-14 w-full justify-start gap-3 text-base" onClick={() => pick("image")}>
                 <Camera className="size-5 text-primary" />
-                拍照或选择图片
+                {t("拍照或选择图片")}
               </Button>
               <Button variant="outline" className="h-14 w-full justify-start gap-3 text-base" onClick={() => pick("pdf")}>
                 <FileUp className="size-5 text-primary" />
-                上传 PDF 报告
+                {t("上传 PDF 报告")}
               </Button>
               <Button variant="outline" className="h-14 w-full justify-start gap-3 text-base" onClick={startManual}>
                 <Keyboard className="size-5 text-primary" />
-                手动录入数值
+                {t("手动录入数值")}
               </Button>
             </div>
           </>
@@ -225,26 +227,26 @@ export function UploadFlow({ open, onOpenChange }: { open: boolean; onOpenChange
         {step === "processing" && (
           <div className="py-10 text-center">
             <Loader2 className="mx-auto size-10 animate-spin text-primary" />
-            <p className="mt-5 text-lg font-medium">正在识别报告内容…</p>
+            <p className="mt-5 text-lg font-medium">{t("正在识别报告内容…")}</p>
             <p className="mt-1.5 text-[15px] text-muted-foreground">
-              正在读取检查项目与数值，稍后请核对识别结果。
+              {t("正在读取检查项目与数值，稍后请核对识别结果。")}
             </p>
-            <p className="mt-4 text-[13px] text-muted-foreground">原始报告会完整保留，随时可以回看。</p>
+            <p className="mt-4 text-[13px] text-muted-foreground">{t("原始报告会完整保留，随时可以回看。")}</p>
           </div>
         )}
 
         {step === "confirm" && (
           <>
             <DialogHeader>
-              <DialogTitle className="text-xl">确认识别结果</DialogTitle>
+              <DialogTitle className="text-xl">{t("确认识别结果")}</DialogTitle>
               <DialogDescription className="text-[15px]">
-                请核对每一项数值。修改后保存的是你确认的数值，AI 识别的原始值也会一并留档。
+                {t("请核对每一项数值。修改后保存的是你确认的数值，AI 识别的原始值也会一并留档。")}
               </DialogDescription>
             </DialogHeader>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label className="text-[14px]">检查日期</Label>
+                <Label className="text-[14px]">{t("检查日期")}</Label>
                 <Input
                   type="date"
                   value={reportDate}
@@ -253,23 +255,23 @@ export function UploadFlow({ open, onOpenChange }: { open: boolean; onOpenChange
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-[14px]">报告类型</Label>
+                <Label className="text-[14px]">{t("报告类型")}</Label>
                 <Select value={reportType} onValueChange={setReportType}>
                   <SelectTrigger className="h-11 text-base">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {REPORT_TYPES.map((t) => (
-                      <SelectItem key={t} value={t}>
-                        {t}
+                    {REPORT_TYPES.map((rt) => (
+                      <SelectItem key={rt} value={rt}>
+                        {t(rt)}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="col-span-2 space-y-1.5">
-                <Label className="text-[14px]">医院</Label>
-                <Input value={hospital} onChange={(e) => setHospital(e.target.value)} className="h-11 text-base" />
+                <Label className="text-[14px]">{t("医院")}</Label>
+                <Input value={t(hospital)} onChange={(e) => setHospital(e.target.value)} className="h-11 text-base" />
               </div>
             </div>
 
@@ -300,7 +302,7 @@ export function UploadFlow({ open, onOpenChange }: { open: boolean; onOpenChange
                             <SelectContent>
                               {METRICS.filter((m) => m.source === "lab").map((m) => (
                                 <SelectItem key={m.key} value={m.canonical}>
-                                  {m.labelZh} {m.canonical}
+                                  {t(m.labelZh)} {m.canonical}
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -308,7 +310,7 @@ export function UploadFlow({ open, onOpenChange }: { open: boolean; onOpenChange
                         ) : (
                           <>
                             <p className="text-[16px] font-medium">{f.canonical_name}</p>
-                            <p className="text-[14px] text-muted-foreground">{f.original_name}</p>
+                            <p className="text-[14px] text-muted-foreground">{t(f.original_name)}</p>
                           </>
                         )}
                       </div>
@@ -317,7 +319,7 @@ export function UploadFlow({ open, onOpenChange }: { open: boolean; onOpenChange
                           type="button"
                           onClick={() => setFields((prev) => prev.filter((_, i) => i !== idx))}
                           className="text-muted-foreground hover:text-destructive"
-                          aria-label="删除该项"
+                          aria-label={t("删除该项")}
                         >
                           <Trash2 className="size-4.5" />
                         </button>
@@ -339,7 +341,7 @@ export function UploadFlow({ open, onOpenChange }: { open: boolean; onOpenChange
                       <Input
                         inputMode="decimal"
                         value={f.confirmed}
-                        placeholder="数值"
+                        placeholder={t("数值")}
                         onChange={(e) =>
                           setFields((prev) => prev.map((x, i) => (i === idx ? { ...x, confirmed: e.target.value } : x)))
                         }
@@ -347,12 +349,12 @@ export function UploadFlow({ open, onOpenChange }: { open: boolean; onOpenChange
                       />
                       <span className="text-[15px] text-muted-foreground">{f.unit}</span>
                       {sourceKind !== "manual" && String(f.value) !== f.confirmed ? (
-                        <span className="ml-auto text-[13px] text-muted-foreground">AI 识别值 {f.value}</span>
+                        <span className="ml-auto text-[13px] text-muted-foreground">{t("AI 识别值 {value}", { value: f.value })}</span>
                       ) : null}
                     </div>
                     {f.reference_min !== null || f.reference_max !== null ? (
                       <p className="mt-1.5 text-[13px] text-muted-foreground">
-                        参考范围 {f.reference_min ?? "—"} – {f.reference_max ?? "—"} {f.unit}
+                        {t("参考范围 {min} – {max} {unit}", { min: f.reference_min ?? "—", max: f.reference_max ?? "—", unit: f.unit })}
                       </p>
                     ) : null}
                   </div>
@@ -362,22 +364,22 @@ export function UploadFlow({ open, onOpenChange }: { open: boolean; onOpenChange
               {sourceKind === "manual" ? (
                 <Button variant="outline" className="h-11 w-full gap-2 text-[15px]" onClick={addEmptyField}>
                   <Plus className="size-4" />
-                  添加检查项目
+                  {t("添加检查项目")}
                 </Button>
               ) : null}
             </div>
 
             <p className="flex items-start gap-2 rounded-lg bg-surface p-3 text-[14px] text-surface-foreground">
               <ShieldCheck className="mt-0.5 size-4.5 shrink-0 text-primary" />
-              KidneyTrack 只帮助整理数据，不做诊断，也不会建议调整用药。如对结果有疑问，建议在下次复诊时向医生确认。
+              {t("KidneyTrack 只帮助整理数据，不做诊断，也不会建议调整用药。如对结果有疑问，建议在下次复诊时向医生确认。")}
             </p>
 
             <div className="flex gap-2.5">
               <Button variant="outline" className="h-12 flex-1 text-base" onClick={() => close(false)}>
-                取消
+                {t("取消")}
               </Button>
               <Button className="h-12 flex-1 text-base" onClick={save} disabled={saving}>
-                {saving ? "保存中…" : "确认并保存"}
+                {saving ? t("保存中…") : t("确认并保存")}
               </Button>
             </div>
           </>

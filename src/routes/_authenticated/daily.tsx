@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { t, useT } from "@/lib/i18n";
 import { useMemo, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Activity, Dumbbell, HeartPulse, Pill, Plus, Scale, Utensils, X } from "lucide-react";
@@ -30,10 +31,10 @@ import {
 export const Route = createFileRoute("/_authenticated/daily")({
   head: () => ({
     meta: [
-      { title: "日常记录 — KidneyTrack" },
-      { name: "description", content: "记录血压、体重、心率、运动、药物与症状，并跟踪每日蛋白摄入。" },
-      { property: "og:title", content: "日常记录 — KidneyTrack" },
-      { property: "og:description", content: "每日蛋白预算由你或医生设定，KidneyTrack 只负责记录。" },
+      { title: `${t("日常记录")} — KidneyTrack` },
+      { name: "description", content: t("记录血压、体重、心率、运动、药物与症状，并跟踪每日蛋白摄入。") },
+      { property: "og:title", content: `${t("日常记录")} — KidneyTrack` },
+      { property: "og:description", content: t("每日蛋白预算由你或医生设定，KidneyTrack 只负责记录。") },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -44,6 +45,7 @@ export const Route = createFileRoute("/_authenticated/daily")({
 const today = () => new Date().toISOString().slice(0, 10);
 
 function DailyPage() {
+  const t = useT();
   const queryClient = useQueryClient();
   const { data: measurements } = useMeasurements();
   const { data: medications } = useMedications();
@@ -74,59 +76,59 @@ function DailyPage() {
       timestamp: new Date().toISOString(),
     });
     if (error) {
-      toast.error("保存失败，请重试");
+      toast.error(t("保存失败，请重试"));
       return false;
     }
     await queryClient.invalidateQueries();
-    toast.success("已记录");
+    toast.success(t("已记录"));
     return true;
   }
 
   return (
     <>
-      <PageHeader title="日常记录" subtitle="血压 · 体重 · 心率 · 运动 · 药物 · 症状" />
+      <PageHeader title={t("日常记录")} subtitle={t("血压 · 体重 · 心率 · 运动 · 药物 · 症状")} />
 
       <div className="mx-auto max-w-4xl space-y-5 px-4 py-5 md:px-8">
         {/* Quick entry */}
         <section className="grid gap-3 sm:grid-cols-2">
           <QuickCard
             icon={<HeartPulse className="size-5 text-primary" />}
-            title="血压"
+            title={t("血压")}
             latest={
               latest("blood_pressure")
                 ? `${latest("blood_pressure")!.value} / ${latest("blood_pressure")!.value2} mmHg`
-                : "暂无记录"
+                : t("暂无记录")
             }
             latestDate={latest("blood_pressure")?.timestamp.slice(0, 10)}
             fields={[
-              { key: "sys", label: "收缩压", unit: "mmHg" },
-              { key: "dia", label: "舒张压", unit: "mmHg" },
+              { key: "sys", label: t("收缩压"), unit: "mmHg" },
+              { key: "dia", label: t("舒张压"), unit: "mmHg" },
             ]}
             onSubmit={(v) => addMeasurement("blood_pressure", Number(v["sys"]), Number(v["dia"]), "mmHg")}
           />
           <QuickCard
             icon={<Scale className="size-5 text-primary" />}
-            title="体重"
-            latest={latest("weight") ? `${latest("weight")!.value} kg` : "暂无记录"}
+            title={t("体重")}
+            latest={latest("weight") ? `${latest("weight")!.value} kg` : t("暂无记录")}
             latestDate={latest("weight")?.timestamp.slice(0, 10)}
-            fields={[{ key: "w", label: "体重", unit: "kg" }]}
+            fields={[{ key: "w", label: t("体重"), unit: "kg" }]}
             onSubmit={(v) => addMeasurement("weight", Number(v["w"]), undefined, "kg")}
           />
           <QuickCard
             icon={<Activity className="size-5 text-primary" />}
-            title="心率"
-            latest={latest("heart_rate") ? `${latest("heart_rate")!.value} bpm` : "暂无记录"}
+            title={t("心率")}
+            latest={latest("heart_rate") ? `${latest("heart_rate")!.value} bpm` : t("暂无记录")}
             latestDate={latest("heart_rate")?.timestamp.slice(0, 10)}
-            fields={[{ key: "hr", label: "心率", unit: "bpm" }]}
+            fields={[{ key: "hr", label: t("心率"), unit: "bpm" }]}
             onSubmit={(v) => addMeasurement("heart_rate", Number(v["hr"]), undefined, "bpm")}
           />
           <QuickCard
             icon={<Dumbbell className="size-5 text-primary" />}
-            title="运动"
-            latest={latest("exercise") ? `${latest("exercise")!.value} 分钟` : "暂无记录"}
+            title={t("运动")}
+            latest={latest("exercise") ? t("{n} 分钟", { n: latest("exercise")!.value }) : t("暂无记录")}
             latestDate={latest("exercise")?.timestamp.slice(0, 10)}
-            fields={[{ key: "min", label: "时长", unit: "分钟" }]}
-            noteLabel="运动方式"
+            fields={[{ key: "min", label: t("时长"), unit: t("分钟") }]}
+            noteLabel={t("运动方式")}
             onSubmit={(v) => addMeasurement("exercise", Number(v["min"]), undefined, "min", v["note"])}
           />
         </section>
@@ -139,12 +141,16 @@ function DailyPage() {
             <div>
               <h2 className="flex items-center gap-2 text-[18px] font-semibold">
                 <Utensils className="size-5 text-primary" />
-                每日蛋白预算
+                {t("每日蛋白预算")}
               </h2>
               <p className="mt-1 text-[14px] text-muted-foreground">
                 {target
-                  ? `${target.source === "doctor" ? "医生建议目标" : "自行设定目标"} ${proteinTarget} g / 天 · 自 ${target.start_date}`
-                  : "还没有设定目标"}
+                  ? t("{source} {target} g / 天 · 自 {date}", {
+                      source: target.source === "doctor" ? t("医生建议目标") : t("自行设定目标"),
+                      target: proteinTarget,
+                      date: target.start_date,
+                    })
+                  : t("还没有设定目标")}
               </p>
             </div>
             <TargetDialog current={proteinTarget} />
@@ -158,23 +164,29 @@ function DailyPage() {
             value={proteinTarget ? Math.min((proteinToday / proteinTarget) * 100, 100) : 0}
             className="mt-3 h-3"
           />
-          <p className="mt-2 text-[15px] text-muted-foreground">今日还剩 {remaining.toFixed(1)} g</p>
+          <p className="mt-2 text-[15px] text-muted-foreground">{t("今日还剩 {n} g", { n: remaining.toFixed(1) })}</p>
 
           <ul className="mt-4 divide-y divide-border">
             {(foodLogs ?? []).map((l) => (
               <li key={l.id} className="flex items-center gap-3 py-2.5">
                 <div className="min-w-0 flex-1">
                   <p className="text-[16px] font-medium">
-                    {l.food_items?.name} × {Number(l.amount)}
+                    {t("{name} × {amount}", {
+                      name: l.food_items?.name ? t(l.food_items.name) : "",
+                      amount: Number(l.amount),
+                    })}
                   </p>
                   <p className="text-[13px] text-muted-foreground">
-                    {l.food_items?.serving_size} · 蛋白 {((l.food_items?.protein_g ?? 0) * Number(l.amount)).toFixed(1)}{" "}
-                    g · 钾 {Math.round((l.food_items?.potassium_mg ?? 0) * Number(l.amount))} mg · 磷{" "}
-                    {Math.round((l.food_items?.phosphorus_mg ?? 0) * Number(l.amount))} mg
+                    {t("{serving} · 蛋白 {protein} g · 钾 {potassium} mg · 磷 {phosphorus} mg", {
+                      serving: l.food_items?.serving_size ? t(l.food_items.serving_size) : "",
+                      protein: ((l.food_items?.protein_g ?? 0) * Number(l.amount)).toFixed(1),
+                      potassium: Math.round((l.food_items?.potassium_mg ?? 0) * Number(l.amount)),
+                      phosphorus: Math.round((l.food_items?.phosphorus_mg ?? 0) * Number(l.amount)),
+                    })}
                   </p>
                 </div>
                 <button
-                  aria-label="删除记录"
+                  aria-label={t("删除记录")}
                   className="text-muted-foreground hover:text-destructive"
                   onClick={async () => {
                     await supabase.from("food_logs").delete().eq("id", l.id);
@@ -190,7 +202,7 @@ function DailyPage() {
           <AddFoodDialog items={foodItems ?? []} />
 
           <p className="mt-3 text-[13px] leading-relaxed text-muted-foreground">
-            蛋白目标由你本人或医生设定，KidneyTrack 只做记录，不会替你决定营养目标。饮食方案的调整建议在下次复诊时向医生确认。
+            {t("蛋白目标由你本人或医生设定，KidneyTrack 只做记录，不会替你决定营养目标。饮食方案的调整建议在下次复诊时向医生确认。")}
           </p>
         </section>
 
@@ -199,7 +211,7 @@ function DailyPage() {
           <div className="flex items-center justify-between gap-3">
             <h2 className="flex items-center gap-2 text-[18px] font-semibold">
               <Pill className="size-5 text-primary" />
-              药物
+              {t("药物")}
             </h2>
             <AddMedicationDialog />
           </div>
@@ -214,16 +226,16 @@ function DailyPage() {
                   {idx < arr.length - 1 ? <span className="w-px flex-1 bg-border" /> : null}
                 </div>
                 <div className="pb-5">
-                  <p className="text-[16px] font-medium">{m.drug_name}</p>
+                  <p className="text-[16px] font-medium">{t(m.drug_name)}</p>
                   <p className="text-[15px] text-muted-foreground">
-                    {m.dose} · {m.frequency}
+                    {m.dose ? t(m.dose) : ""} · {m.frequency ? t(m.frequency) : ""}
                   </p>
                   <p className="kt-num text-[13px] text-muted-foreground">
-                    {m.start_date} 开始
-                    {m.stop_date ? ` · ${m.stop_date} 停用` : " · 正在服用"}
-                    {m.doctor ? ` · ${m.doctor}` : ""}
+                    {t("{date} 开始", { date: m.start_date ?? "" })}
+                    {m.stop_date ? t(" · {date} 停用", { date: m.stop_date }) : t(" · 正在服用")}
+                    {m.doctor ? t(" · {doctor}", { doctor: t(m.doctor) }) : ""}
                   </p>
-                  {m.notes ? <p className="text-[14px] text-muted-foreground">备注：{m.notes}</p> : null}
+                  {m.notes ? <p className="text-[14px] text-muted-foreground">{t("备注：{notes}", { notes: t(m.notes) })}</p> : null}
                 </div>
               </li>
             ))}
@@ -251,6 +263,7 @@ function QuickCard({
   noteLabel?: string | undefined;
   onSubmit: (values: Record<string, string>) => Promise<boolean>;
 }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [values, setValues] = useState<Record<string, string>>({});
 
@@ -261,24 +274,24 @@ function QuickCard({
         {title}
       </p>
       <p className="kt-num mt-2 text-[22px] font-semibold">{latest}</p>
-      <p className="text-[13px] text-muted-foreground">{latestDate ? `最近记录 ${latestDate}` : "\u00a0"}</p>
+      <p className="text-[13px] text-muted-foreground">{latestDate ? t("最近记录 {date}", { date: latestDate }) : "\u00a0"}</p>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button variant="outline" className="mt-3 h-11 w-full gap-1.5 text-[15px]">
             <Plus className="size-4" />
-            快速记录
+            {t("快速记录")}
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
-            <DialogTitle className="text-xl">记录{title}</DialogTitle>
-            <DialogDescription className="text-[15px]">记录会保存到你的时间线。</DialogDescription>
+            <DialogTitle className="text-xl">{t("记录{title}", { title })}</DialogTitle>
+            <DialogDescription className="text-[15px]">{t("记录会保存到你的时间线。")}</DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
             {fields.map((f) => (
               <div key={f.key} className="space-y-1.5">
                 <Label className="text-[15px]">
-                  {f.label}（{f.unit}）
+                  {t("{label}（{unit}）", { label: f.label, unit: f.unit })}
                 </Label>
                 <Input
                   inputMode="decimal"
@@ -304,7 +317,7 @@ function QuickCard({
             onClick={async () => {
               const missing = fields.some((f) => !values[f.key] || Number.isNaN(Number(values[f.key])));
               if (missing) {
-                toast.error("请填写有效数值");
+                toast.error(t("请填写有效数值"));
                 return;
               }
               if (await onSubmit(values)) {
@@ -313,7 +326,7 @@ function QuickCard({
               }
             }}
           >
-            保存
+            {t("保存")}
           </Button>
         </DialogContent>
       </Dialog>
@@ -328,42 +341,45 @@ function SymptomCard({
   onSubmit: (type: string, value: number, value2?: number, unit?: string, note?: string) => Promise<boolean>;
   latest?: { note: string | null; timestamp: string } | undefined;
 }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [note, setNote] = useState("");
   const [severity, setSeverity] = useState("2");
 
   return (
     <section className="kt-card p-4">
-      <p className="text-[16px] font-semibold">症状</p>
+      <p className="text-[16px] font-semibold">{t("症状")}</p>
       <p className="mt-1.5 text-[15px] text-muted-foreground">
-        {latest ? `${latest.timestamp.slice(0, 10)} · ${latest.note ?? ""}` : "暂无症状记录（如水肿、乏力、泡沫尿等）"}
+        {latest
+          ? t("{date} · {note}", { date: latest.timestamp.slice(0, 10), note: latest.note ?? "" })
+          : t("暂无症状记录（如水肿、乏力、泡沫尿等）")}
       </p>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button variant="outline" className="mt-3 h-11 gap-1.5 text-[15px]">
             <Plus className="size-4" />
-            记录症状
+            {t("记录症状")}
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
-            <DialogTitle className="text-xl">记录症状</DialogTitle>
+            <DialogTitle className="text-xl">{t("记录症状")}</DialogTitle>
             <DialogDescription className="text-[15px]">
-              症状记录只作为你与医生沟通的参考，不用于判断病情。
+              {t("症状记录只作为你与医生沟通的参考，不用于判断病情。")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
             <div className="space-y-1.5">
-              <Label className="text-[15px]">症状描述</Label>
+              <Label className="text-[15px]">{t("症状描述")}</Label>
               <Textarea
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                placeholder="例如：早晨眼睑轻度水肿"
+                placeholder={t("例如：早晨眼睑轻度水肿")}
                 className="min-h-24 text-base"
               />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-[15px]">程度（1 轻 – 5 重）</Label>
+              <Label className="text-[15px]">{t("程度（1 轻 – 5 重）")}</Label>
               <Input
                 inputMode="numeric"
                 value={severity}
@@ -376,7 +392,7 @@ function SymptomCard({
             className="h-12 text-base"
             onClick={async () => {
               if (!note.trim()) {
-                toast.error("请填写症状描述");
+                toast.error(t("请填写症状描述"));
                 return;
               }
               if (await onSubmit("symptom", Number(severity) || 1, undefined, "级", note)) {
@@ -385,7 +401,7 @@ function SymptomCard({
               }
             }}
           >
-            保存
+            {t("保存")}
           </Button>
         </DialogContent>
       </Dialog>
@@ -394,6 +410,7 @@ function SymptomCard({
 }
 
 function TargetDialog({ current }: { current: number }) {
+  const t = useT();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(String(current || 44));
@@ -403,19 +420,19 @@ function TargetDialog({ current }: { current: number }) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="h-11 shrink-0 text-[15px]">
-          设定目标
+          {t("设定目标")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle className="text-xl">每日蛋白目标</DialogTitle>
+          <DialogTitle className="text-xl">{t("每日蛋白目标")}</DialogTitle>
           <DialogDescription className="text-[15px]">
-            目标必须由你本人或医生决定。KidneyTrack 不会自动生成营养目标。
+            {t("目标必须由你本人或医生决定。KidneyTrack 不会自动生成营养目标。")}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-3">
           <div className="space-y-1.5">
-            <Label className="text-[15px]">目标（g / 天）</Label>
+            <Label className="text-[15px]">{t("目标（g / 天）")}</Label>
             <Input
               inputMode="decimal"
               value={value}
@@ -426,8 +443,8 @@ function TargetDialog({ current }: { current: number }) {
           <div className="flex gap-2">
             {(
               [
-                { key: "doctor", label: "医生建议" },
-                { key: "self", label: "本人设定" },
+                { key: "doctor", label: t("医生建议") },
+                { key: "self", label: t("本人设定") },
               ] as const
             ).map((o) => (
               <button
@@ -449,7 +466,7 @@ function TargetDialog({ current }: { current: number }) {
           onClick={async () => {
             const n = Number(value);
             if (!n || Number.isNaN(n)) {
-              toast.error("请填写有效数值");
+              toast.error(t("请填写有效数值"));
               return;
             }
             const { error } = await supabase.from("nutrition_targets").insert({
@@ -459,15 +476,15 @@ function TargetDialog({ current }: { current: number }) {
               start_date: today(),
             });
             if (error) {
-              toast.error("保存失败，请重试");
+              toast.error(t("保存失败，请重试"));
               return;
             }
             await queryClient.invalidateQueries();
-            toast.success("目标已更新");
+            toast.success(t("目标已更新"));
             setOpen(false);
           }}
         >
-          保存
+          {t("保存")}
         </Button>
       </DialogContent>
     </Dialog>
@@ -475,6 +492,7 @@ function TargetDialog({ current }: { current: number }) {
 }
 
 function AddFoodDialog({ items }: { items: Array<{ id: string; name: string; serving_size: string; protein_g: number }> }) {
+  const t = useT();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [amounts, setAmounts] = useState<Record<string, string>>({});
@@ -484,26 +502,26 @@ function AddFoodDialog({ items }: { items: Array<{ id: string; name: string; ser
       <DialogTrigger asChild>
         <Button variant="outline" className="mt-3 h-12 w-full gap-1.5 text-[15px]">
           <Plus className="size-4" />
-          添加食物
+          {t("添加食物")}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl">添加食物</DialogTitle>
-          <DialogDescription className="text-[15px]">填写份数后保存，蛋白预算会自动更新。</DialogDescription>
+          <DialogTitle className="text-xl">{t("添加食物")}</DialogTitle>
+          <DialogDescription className="text-[15px]">{t("填写份数后保存，蛋白预算会自动更新。")}</DialogDescription>
         </DialogHeader>
         <ul className="divide-y divide-border">
           {items.map((f) => (
             <li key={f.id} className="flex items-center gap-3 py-2.5">
               <div className="min-w-0 flex-1">
-                <p className="text-[16px] font-medium">{f.name}</p>
+                <p className="text-[16px] font-medium">{t(f.name)}</p>
                 <p className="text-[13px] text-muted-foreground">
-                  {f.serving_size} · 蛋白 {f.protein_g} g
+                  {t("{serving} · 蛋白 {protein} g", { serving: t(f.serving_size), protein: f.protein_g })}
                 </p>
               </div>
               <Input
                 inputMode="decimal"
-                placeholder="份"
+                placeholder={t("份")}
                 value={amounts[f.id] ?? ""}
                 onChange={(e) => setAmounts((p) => ({ ...p, [f.id]: e.target.value }))}
                 className="h-11 w-20 text-base"
@@ -523,21 +541,21 @@ function AddFoodDialog({ items }: { items: Array<{ id: string; name: string; ser
                 date: today(),
               }));
             if (rows.length === 0) {
-              toast.error("请填写至少一项份数");
+              toast.error(t("请填写至少一项份数"));
               return;
             }
             const { error } = await supabase.from("food_logs").insert(rows);
             if (error) {
-              toast.error("保存失败，请重试");
+              toast.error(t("保存失败，请重试"));
               return;
             }
             await queryClient.invalidateQueries();
             setAmounts({});
             setOpen(false);
-            toast.success("已添加到今日饮食");
+            toast.success(t("已添加到今日饮食"));
           }}
         >
-          保存
+          {t("保存")}
         </Button>
       </DialogContent>
     </Dialog>
@@ -545,6 +563,7 @@ function AddFoodDialog({ items }: { items: Array<{ id: string; name: string; ser
 }
 
 function AddMedicationDialog() {
+  const t = useT();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({
@@ -564,22 +583,22 @@ function AddMedicationDialog() {
       <DialogTrigger asChild>
         <Button variant="outline" className="h-11 gap-1.5 text-[15px]">
           <Plus className="size-4" />
-          添加药物
+          {t("添加药物")}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[88vh] overflow-y-auto sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl">添加药物</DialogTitle>
+          <DialogTitle className="text-xl">{t("添加药物")}</DialogTitle>
           <DialogDescription className="text-[15px]">
-            请按医生处方填写。KidneyTrack 不会建议用药或调整剂量。
+            {t("请按医生处方填写。KidneyTrack 不会建议用药或调整剂量。")}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-3">
           {[
-            { k: "drug_name", label: "药物名称", ph: "例如 氯沙坦钾 Losartan" },
-            { k: "dose", label: "剂量", ph: "例如 50 mg" },
-            { k: "frequency", label: "频次", ph: "例如 每日一次" },
-            { k: "doctor", label: "开药医生", ph: "例如 李医生 (肾内科)" },
+            { k: "drug_name", label: t("药物名称"), ph: t("例如 氯沙坦钾 Losartan") },
+            { k: "dose", label: t("剂量"), ph: t("例如 50 mg") },
+            { k: "frequency", label: t("频次"), ph: t("例如 每日一次") },
+            { k: "doctor", label: t("开药医生"), ph: t("例如 李医生 (肾内科)") },
           ].map((f) => (
             <div key={f.k} className="space-y-1.5">
               <Label className="text-[15px]">{f.label}</Label>
@@ -593,7 +612,7 @@ function AddMedicationDialog() {
           ))}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label className="text-[15px]">开始日期</Label>
+              <Label className="text-[15px]">{t("开始日期")}</Label>
               <Input
                 type="date"
                 value={form.start_date}
@@ -602,7 +621,7 @@ function AddMedicationDialog() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-[15px]">停用日期</Label>
+              <Label className="text-[15px]">{t("停用日期")}</Label>
               <Input
                 type="date"
                 value={form.stop_date}
@@ -612,7 +631,7 @@ function AddMedicationDialog() {
             </div>
           </div>
           <div className="space-y-1.5">
-            <Label className="text-[15px]">备注（可选）</Label>
+            <Label className="text-[15px]">{t("备注（可选）")}</Label>
             <Textarea value={form.notes} onChange={(e) => set("notes", e.target.value)} className="min-h-20 text-base" />
           </div>
         </div>
@@ -620,7 +639,7 @@ function AddMedicationDialog() {
           className="h-12 text-base"
           onClick={async () => {
             if (!form.drug_name.trim()) {
-              toast.error("请填写药物名称");
+              toast.error(t("请填写药物名称"));
               return;
             }
             const { error } = await supabase.from("medications").insert({
@@ -634,7 +653,7 @@ function AddMedicationDialog() {
               notes: form.notes || null,
             });
             if (error) {
-              toast.error("保存失败，请重试");
+              toast.error(t("保存失败，请重试"));
               return;
             }
             await supabase.from("events").insert({
@@ -645,11 +664,11 @@ function AddMedicationDialog() {
               date: form.start_date || today(),
             });
             await queryClient.invalidateQueries();
-            toast.success("药物已添加");
+            toast.success(t("药物已添加"));
             setOpen(false);
           }}
         >
-          保存
+          {t("保存")}
         </Button>
       </DialogContent>
     </Dialog>

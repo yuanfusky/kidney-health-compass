@@ -17,14 +17,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { t, useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/family")({
   head: () => ({
     meta: [
-      { title: "家属管理 — KidneyTrack" },
-      { name: "description", content: "管理患者、家属管理者与仅查看成员的权限。" },
-      { property: "og:title", content: "家属管理 — KidneyTrack" },
-      { property: "og:description", content: "数据归患者本人所有，家属权限可随时调整。" },
+      { title: t("家属管理 — KidneyTrack") },
+      { name: "description", content: t("管理患者、家属管理者与仅查看成员的权限。") },
+      { property: "og:title", content: t("家属管理 — KidneyTrack") },
+      { property: "og:description", content: t("数据归患者本人所有，家属权限可随时调整。") },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -32,35 +33,39 @@ export const Route = createFileRoute("/_authenticated/family")({
   component: FamilyPage,
 });
 
-const ROLES = {
-  patient: { label: "患者", desc: "数据所有者，可管理全部记录与权限", Icon: UserRound },
-  caregiver: { label: "家属管理者", desc: "可上传报告、添加健康记录、查看趋势", Icon: UserCog },
-  viewer: { label: "仅查看", desc: "只能查看，不能修改任何记录", Icon: Eye },
-} as const;
+function getRoles(t: ReturnType<typeof useT>) {
+  return {
+    patient: { label: t("患者"), desc: t("数据所有者，可管理全部记录与权限"), Icon: UserRound },
+    caregiver: { label: t("家属管理者"), desc: t("可上传报告、添加健康记录、查看趋势"), Icon: UserCog },
+    viewer: { label: t("仅查看"), desc: t("只能查看，不能修改任何记录"), Icon: Eye },
+  } as const;
+}
 
 function FamilyPage() {
+  const t = useT();
+  const ROLES = getRoles(t);
   const queryClient = useQueryClient();
   const { data: members } = useFamily();
 
   async function changeRole(id: string, role: string) {
     const { error } = await supabase.from("family_access").update({ role }).eq("id", id);
     if (error) {
-      toast.error("修改失败，请重试");
+      toast.error(t("修改失败，请重试"));
       return;
     }
     await queryClient.invalidateQueries();
-    toast.success("权限已更新");
+    toast.success(t("权限已更新"));
   }
 
   return (
     <>
       <PageHeader
-        title="家属管理"
-        subtitle="数据归患者本人所有"
+        title={t("家属管理")}
+        subtitle={t("数据归患者本人所有")}
         showProfile={false}
         action={
           <Button asChild variant="ghost" size="icon" className="size-11">
-            <Link to="/profile" aria-label="返回个人中心">
+            <Link to="/profile" aria-label={t("返回个人中心")}>
               <ArrowLeft className="size-5" />
             </Link>
           </Button>
@@ -81,20 +86,20 @@ function FamilyPage() {
                     <Icon className="size-5" />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[18px] font-medium">{m.member_name}</p>
+                    <p className="text-[18px] font-medium">{t(m.member_name)}</p>
                     <p className="text-[15px] text-muted-foreground">
                       {role.label}
-                      {m.relation ? ` · ${m.relation}` : ""}
+                      {m.relation ? ` · ${t(m.relation)}` : ""}
                     </p>
                   </div>
                   {m.role !== "patient" ? (
                     <button
-                      aria-label="移除成员"
+                      aria-label={t("移除成员")}
                       className="text-muted-foreground hover:text-destructive"
                       onClick={async () => {
                         await supabase.from("family_access").delete().eq("id", m.id);
                         await queryClient.invalidateQueries();
-                        toast.success("成员已移除");
+                        toast.success(t("成员已移除"));
                       }}
                     >
                       <Trash2 className="size-4.5" />
@@ -126,7 +131,7 @@ function FamilyPage() {
 
         <p className="flex items-start gap-2 rounded-xl bg-surface p-4 text-[14px] leading-relaxed text-surface-foreground">
           <ShieldCheck className="mt-0.5 size-4.5 shrink-0 text-primary" />
-          您的健康数据属于您本人，未经授权不会与第三方共享。家属权限可以随时调整或撤回。
+          {t("您的健康数据属于您本人，未经授权不会与第三方共享。家属权限可以随时调整或撤回。")}
         </p>
       </div>
     </>
@@ -134,6 +139,8 @@ function FamilyPage() {
 }
 
 function AddMemberDialog() {
+  const t = useT();
+  const ROLES = getRoles(t);
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
@@ -145,23 +152,23 @@ function AddMemberDialog() {
       <DialogTrigger asChild>
         <Button className="h-14 w-full gap-2 text-[17px]">
           <Plus className="size-5" />
-          添加家属
+          {t("添加家属")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle className="text-xl">添加家属</DialogTitle>
+          <DialogTitle className="text-xl">{t("添加家属")}</DialogTitle>
           <DialogDescription className="text-[15px]">
-            家属管理者可以帮你上传报告和记录数据；仅查看成员只能查看。
+            {t("家属管理者可以帮你上传报告和记录数据；仅查看成员只能查看。")}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-3">
           <div className="space-y-1.5">
-            <Label className="text-[15px]">称呼</Label>
-            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="例如 女儿" className="h-12 text-base" />
+            <Label className="text-[15px]">{t("称呼")}</Label>
+            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("例如 女儿")} className="h-12 text-base" />
           </div>
           <div className="space-y-1.5">
-            <Label className="text-[15px]">关系（可选）</Label>
+            <Label className="text-[15px]">{t("关系（可选）")}</Label>
             <Input value={relation} onChange={(e) => setRelation(e.target.value)} className="h-12 text-base" />
           </div>
           <div className="flex gap-2">
@@ -182,7 +189,7 @@ function AddMemberDialog() {
           className="h-12 text-base"
           onClick={async () => {
             if (!name.trim()) {
-              toast.error("请填写称呼");
+              toast.error(t("请填写称呼"));
               return;
             }
             const { error } = await supabase.from("family_access").insert({
@@ -192,15 +199,15 @@ function AddMemberDialog() {
               role,
             });
             if (error) {
-              toast.error("保存失败，请重试");
+              toast.error(t("保存失败，请重试"));
               return;
             }
             await queryClient.invalidateQueries();
-            toast.success("家属已添加");
+            toast.success(t("家属已添加"));
             setOpen(false);
           }}
         >
-          保存
+          {t("保存")}
         </Button>
       </DialogContent>
     </Dialog>

@@ -2,6 +2,9 @@ import { Link } from "@tanstack/react-router";
 import { UserRound } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { useT } from "@/lib/i18n";
+
+
 export function PageHeader({
   title,
   subtitle,
@@ -13,6 +16,7 @@ export function PageHeader({
   action?: ReactNode;
   showProfile?: boolean;
 }) {
+  const t = useT();
   return (
     <header className="kt-no-print sticky top-0 z-30 border-b border-border bg-background/90 px-4 py-3.5 backdrop-blur md:px-8">
       <div className="mx-auto flex max-w-4xl items-center gap-3">
@@ -24,7 +28,7 @@ export function PageHeader({
         {showProfile ? (
           <Link
             to="/profile"
-            aria-label="个人中心"
+            aria-label={t("个人中心")}
             className="grid size-11 shrink-0 place-items-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:text-primary"
           >
             <UserRound className="size-5" />

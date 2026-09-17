@@ -1,0 +1,82 @@
+/** Daily record page: measurements, symptoms, protein budget, medications. */
+export const DAILY_DICT: Record<string, string> = {
+  "日常记录": "Daily Log",
+  "血压 · 体重 · 心率 · 运动 · 药物 · 症状": "Blood pressure · Weight · Heart rate · Activity · Medications · Symptoms",
+  "记录血压、体重、心率、运动、药物与症状，并跟踪每日蛋白摄入。":
+    "Log blood pressure, weight, heart rate, activity, medications and symptoms, and track daily protein intake.",
+  "每日蛋白预算由你或医生设定，KidneyTrack 只负责记录。":
+    "The daily protein budget is set by you or your doctor — KidneyTrack only records it.",
+
+  "暂无记录": "No record yet",
+  "最近记录 {date}": "Last recorded {date}",
+  "快速记录": "Quick log",
+  "记录{title}": "Log {title}",
+  "记录会保存到你的时间线。": "This entry will be saved to your timeline.",
+  "{label}（{unit}）": "{label} ({unit})",
+  "时长": "Duration",
+  "分钟": "minutes",
+  "{n} 分钟": "{n} min",
+  "运动方式": "Activity type",
+  "请填写有效数值": "Please enter a valid number",
+  "保存": "Save",
+
+  "暂无症状记录（如水肿、乏力、泡沫尿等）": "No symptoms logged yet (e.g. swelling, fatigue, foamy urine)",
+  "{date} · {note}": "{date} · {note}",
+  "记录症状": "Log symptom",
+  "症状记录只作为你与医生沟通的参考，不用于判断病情。":
+    "Symptom entries are for discussion with your doctor only, not for diagnosis.",
+  "症状描述": "Symptom description",
+  "例如：早晨眼睑轻度水肿": "e.g. mild eyelid swelling in the morning",
+  "程度（1 轻 – 5 重）": "Severity (1 mild – 5 severe)",
+  "请填写症状描述": "Please describe the symptom",
+
+  "设定目标": "Set target",
+  "每日蛋白目标": "Daily protein target",
+  "目标必须由你本人或医生决定。KidneyTrack 不会自动生成营养目标。":
+    "The target must be decided by you or your doctor. KidneyTrack does not generate nutrition targets automatically.",
+  "目标（g / 天）": "Target (g / day)",
+  "医生建议": "Doctor recommended",
+  "本人设定": "Self-set",
+  "目标已更新": "Target updated",
+
+  "每日蛋白预算": "Daily protein budget",
+  "医生建议目标": "Doctor-recommended target",
+  "自行设定目标": "Self-set target",
+  "{source} {target} g / 天 · 自 {date}": "{source} {target} g / day · since {date}",
+  "还没有设定目标": "No target set yet",
+  "今日还剩 {n} g": "{n} g remaining today",
+  "{name} × {amount}": "{name} × {amount}",
+  "{serving} · 蛋白 {protein} g · 钾 {potassium} mg · 磷 {phosphorus} mg":
+    "{serving} · Protein {protein} g · Potassium {potassium} mg · Phosphorus {phosphorus} mg",
+  "删除记录": "Delete entry",
+  "添加食物": "Add food",
+  "填写份数后保存，蛋白预算会自动更新。": "Enter the serving amount and save; the protein budget updates automatically.",
+  "份": "servings",
+  "{serving} · 蛋白 {protein} g": "{serving} · Protein {protein} g",
+  "请填写至少一项份数": "Please enter at least one serving amount",
+  "已添加到今日饮食": "Added to today's food log",
+  "蛋白目标由你本人或医生设定，KidneyTrack 只做记录，不会替你决定营养目标。饮食方案的调整建议在下次复诊时向医生确认。":
+    "The protein target is set by you or your doctor — KidneyTrack only records it and does not decide your nutrition goals for you. Please confirm any changes to your eating plan with your doctor at your next visit.",
+
+  "开始日期": "Start date",
+  "停用日期": "Stop date",
+  "备注（可选）": "Notes (optional)",
+  "{date} 开始": "Started {date}",
+  " · {date} 停用": " · stopped {date}",
+  " · 正在服用": " · currently taking",
+  " · {doctor}": " · {doctor}",
+  "备注：{notes}": "Notes: {notes}",
+  "添加药物": "Add medication",
+  "请按医生处方填写。KidneyTrack 不会建议用药或调整剂量。":
+    "Fill in as prescribed by your doctor. KidneyTrack does not recommend medications or adjust dosages.",
+  "药物名称": "Drug name",
+  "例如 氯沙坦钾 Losartan": "e.g. Losartan potassium",
+  "剂量": "Dose",
+  "例如 50 mg": "e.g. 50 mg",
+  "频次": "Frequency",
+  "例如 每日一次": "e.g. Once daily",
+  "开药医生": "Prescribing doctor",
+  "例如 李医生 (肾内科)": "e.g. Dr. Li (Nephrology)",
+  "请填写药物名称": "Please enter the drug name",
+  "药物已添加": "Medication added",
+};

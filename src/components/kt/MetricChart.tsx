@@ -10,6 +10,7 @@ import {
 } from "recharts";
 import type { MetricDef } from "@/lib/kt/metrics";
 import type { SeriesPoint } from "@/lib/kt/data";
+import { useT } from "@/lib/i18n";
 
 export interface ChartSeries {
   metric: MetricDef;
@@ -56,6 +57,7 @@ export function MetricChart({
   onPointClick?: (point: { date: string; reportId?: string | null }) => void;
   height?: number;
 }) {
+  const t = useT();
   const rows = mergeSeries(series);
 
   if (rows.length === 0) {
@@ -64,7 +66,7 @@ export function MetricChart({
         className="grid place-items-center rounded-xl bg-muted/60 text-sm text-muted-foreground"
         style={{ height }}
       >
-        暂无数据，添加记录后即可查看趋势
+        {t("暂无数据，添加记录后即可查看趋势")}
       </div>
     );
   }
@@ -117,11 +119,11 @@ export function MetricChart({
               background: "var(--color-card)",
               fontSize: 14,
             }}
-            labelFormatter={(l) => `日期 ${l}`}
+            labelFormatter={(l) => t("日期 {date}", { date: l as string })}
             formatter={(value, name) => {
               const idx = Number(String(name).replace("v", ""));
               const s = series[idx];
-              return [`${value} ${s?.metric.unit ?? ""}`, `${s?.metric.labelZh ?? ""}`];
+              return [`${value} ${s?.metric.unit ?? ""}`, s?.metric.labelZh ? t(s.metric.labelZh) : ""];
             }}
           />
           {markers.map((m) => (
