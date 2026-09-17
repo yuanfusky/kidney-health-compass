@@ -15,6 +15,7 @@ import {
 } from "@/lib/kt/data";
 import { Button } from "@/components/ui/button";
 import { t, useT } from "@/lib/i18n";
+import { metricLabel } from "@/lib/kt/metrics";
 
 export const Route = createFileRoute("/_authenticated/home")({
   head: () => ({

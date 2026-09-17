@@ -10,7 +10,7 @@ import {
 } from "recharts";
 import type { MetricDef } from "@/lib/kt/metrics";
 import type { SeriesPoint } from "@/lib/kt/data";
-import { useT } from "@/lib/i18n";
+import { getLang, useT } from "@/lib/i18n";
 
 export interface ChartSeries {
   metric: MetricDef;
