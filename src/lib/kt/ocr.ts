@@ -6,6 +6,8 @@
  * and be swapped in `extractionProvider` below — no UI changes required.
  */
 
+import { t } from "@/lib/i18n";
+
 export interface ExtractedField {
   canonical_name: string;
   original_name: string;
@@ -185,7 +187,7 @@ export const mockExtractionProvider: ExtractionProvider = {
 export const extractionProvider: ExtractionProvider = mockExtractionProvider;
 
 export function confidenceLabel(c: number): { text: string; tone: "high" | "medium" | "low" } {
-  if (c >= 0.9) return { text: "识别可信度高", tone: "high" };
-  if (c >= 0.75) return { text: "识别可信度中等", tone: "medium" };
-  return { text: "请仔细核对", tone: "low" };
+  if (c >= 0.9) return { text: t("识别可信度高"), tone: "high" };
+  if (c >= 0.75) return { text: t("识别可信度中等"), tone: "medium" };
+  return { text: t("请仔细核对"), tone: "low" };
 }

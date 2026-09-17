@@ -96,4 +96,18 @@ export const VISITS_DICT: Record<string, string> = {
   "识别可信度高": "High confidence",
   "识别可信度中等": "Medium confidence",
   "请仔细核对": "Please review carefully",
+
+  // OCR preset original_name labels
+  "肌酐 Cr": "Creatinine (Cr)",
+  "eGFR (CKD-EPI)": "eGFR (CKD-EPI)",
+  "尿素氮 BUN": "Urea nitrogen (BUN)",
+  "血钾 K": "Potassium (K)",
+  "白蛋白 ALB": "Albumin (ALB)",
+  "24小时尿蛋白定量": "24-hour urine protein",
+  "尿白蛋白/肌酐比": "Urine albumin/creatinine ratio",
+  "尿蛋白/肌酐比": "Urine protein/creatinine ratio",
+  "血红蛋白 HGB": "Hemoglobin (HGB)",
+  "血钠 Na": "Sodium (Na)",
+  "血磷 P": "Phosphorus (P)",
+  "血钙 Ca": "Calcium (Ca)",
 };
