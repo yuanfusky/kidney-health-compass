@@ -269,12 +269,14 @@ function QuickCard({
 
   return (
     <div className="kt-card p-4">
-      <p className="flex items-center gap-2 text-[16px] font-semibold">
+      <p className="kt-eyebrow flex items-center gap-1.5">
         {icon}
         {title}
       </p>
-      <p className="kt-num mt-2 text-[22px] font-semibold">{latest}</p>
-      <p className="text-[13px] text-muted-foreground">{latestDate ? t("最近记录 {date}", { date: latestDate }) : "\u00a0"}</p>
+      <p className="kt-num mt-2.5 text-[24px] font-semibold leading-none">{latest}</p>
+      <p className="mt-2 border-t border-border pt-2 text-[13px] text-muted-foreground">
+        {latestDate ? t("最近记录 {date}", { date: latestDate }) : "\u00a0"}
+      </p>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button variant="outline" className="mt-3 h-11 w-full gap-1.5 text-[15px]">
