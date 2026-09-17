@@ -105,7 +105,7 @@ function TrendsPage() {
 
         <section className="kt-card p-4 md:p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-[18px] font-semibold">{category}</h2>
+            <h2 className="text-[18px] font-semibold">{t(category)}</h2>
             <div className="flex gap-1.5">
               {RANGES.map((r) => (
                 <button
