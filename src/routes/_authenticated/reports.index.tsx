@@ -57,13 +57,13 @@ function ReportsPage() {
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="kt-num text-[15px] font-medium text-muted-foreground">{r.report_date}</span>
-                    <span className="rounded-full bg-accent px-2.5 py-0.5 text-[13px] font-medium text-accent-foreground">
+                    <span className="kt-eyebrow kt-num">{r.report_date}</span>
+                    <span className="rounded-full border border-border bg-surface px-2.5 py-0.5 text-[12px] font-medium text-surface-foreground">
                       {t(r.report_type)}
                     </span>
                   </div>
-                  <p className="mt-1 truncate text-[17px] font-medium">{r.hospital ? t(r.hospital) : t("未填写医院")}</p>
-                  <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[14px] text-muted-foreground">
+                  <p className="mt-1.5 truncate text-[18px] font-medium">{r.hospital ? t(r.hospital) : t("未填写医院")}</p>
+                  <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[14px] text-muted-foreground">
                     <span>{t("已提取 {n} 项指标", { n: countByReport.get(r.id) ?? 0 })}</span>
                     {r.verified ? (
                       <span className="inline-flex items-center gap-1 text-positive">

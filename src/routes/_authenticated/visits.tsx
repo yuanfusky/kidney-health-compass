@@ -177,15 +177,13 @@ function VisitsPage() {
             {t("准备下一次复诊")}
           </h2>
           <p className="mt-1.5 text-[15px] text-muted-foreground">{t("选择摘要覆盖的时间范围。")}</p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="kt-segment mt-3 max-w-full flex-wrap">
             {RANGES.map((r) => (
               <button
                 key={r.value}
                 onClick={() => setMonths(r.value)}
-                className={`rounded-lg border px-4 py-2.5 text-[15px] font-medium ${
-                  months === r.value
-                    ? "border-primary bg-accent text-accent-foreground"
-                    : "border-border text-muted-foreground"
+                className={`rounded-full px-4 py-2 text-[15px] font-medium transition-colors ${
+                  months === r.value ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"
                 }`}
               >
                 {t(r.label)}
@@ -213,7 +211,7 @@ function VisitsPage() {
             </header>
 
             <section>
-              <h3 className="text-[17px] font-semibold">{t("关键指标变化")}</h3>
+              <h3 className="kt-eyebrow border-b border-border pb-2">{t("关键指标变化")}</h3>
               <ul className="mt-2 divide-y divide-border">
                 {rows.map((r) => (
                   <li key={r.metric.key} className="flex items-baseline justify-between gap-3 py-2">
@@ -230,7 +228,7 @@ function VisitsPage() {
             </section>
 
             <section>
-              <h3 className="text-[17px] font-semibold">{t("治疗变化")}</h3>
+              <h3 className="kt-eyebrow border-b border-border pb-2">{t("治疗变化")}</h3>
               <ul className="mt-2 space-y-1.5 text-[16px]">
                 {treatment.changes.length ? (
                   treatment.changes.map((line) => (
@@ -254,7 +252,7 @@ function VisitsPage() {
             </section>
 
             <section>
-              <h3 className="text-[17px] font-semibold">{t("营养和生活状态")}</h3>
+              <h3 className="kt-eyebrow border-b border-border pb-2">{t("营养和生活状态")}</h3>
               <ul className="mt-2 space-y-1.5 text-[16px]">
                 {nutrition.map((n) => (
                   <li key={n} className="flex gap-2">
@@ -266,7 +264,7 @@ function VisitsPage() {
             </section>
 
             <section>
-              <h3 className="text-[17px] font-semibold">{t("建议向医生确认的问题")}</h3>
+              <h3 className="kt-eyebrow border-b border-border pb-2">{t("建议向医生确认的问题")}</h3>
               <ol className="mt-2 space-y-1.5 text-[16px]">
                 {QUESTIONS.map((q, i) => (
                   <li key={q} className="flex gap-2">

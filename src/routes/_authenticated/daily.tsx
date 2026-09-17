@@ -92,7 +92,7 @@ function DailyPage() {
         {/* Quick entry */}
         <section className="grid gap-3 sm:grid-cols-2">
           <QuickCard
-            icon={<HeartPulse className="size-5 text-primary" />}
+            icon={<HeartPulse className="size-4 text-primary" />}
             title={t("血压")}
             latest={
               latest("blood_pressure")
@@ -107,7 +107,7 @@ function DailyPage() {
             onSubmit={(v) => addMeasurement("blood_pressure", Number(v["sys"]), Number(v["dia"]), "mmHg")}
           />
           <QuickCard
-            icon={<Scale className="size-5 text-primary" />}
+            icon={<Scale className="size-4 text-primary" />}
             title={t("体重")}
             latest={latest("weight") ? `${latest("weight")!.value} kg` : t("暂无记录")}
             latestDate={latest("weight")?.timestamp.slice(0, 10)}
@@ -115,7 +115,7 @@ function DailyPage() {
             onSubmit={(v) => addMeasurement("weight", Number(v["w"]), undefined, "kg")}
           />
           <QuickCard
-            icon={<Activity className="size-5 text-primary" />}
+            icon={<Activity className="size-4 text-primary" />}
             title={t("心率")}
             latest={latest("heart_rate") ? `${latest("heart_rate")!.value} bpm` : t("暂无记录")}
             latestDate={latest("heart_rate")?.timestamp.slice(0, 10)}
@@ -123,7 +123,7 @@ function DailyPage() {
             onSubmit={(v) => addMeasurement("heart_rate", Number(v["hr"]), undefined, "bpm")}
           />
           <QuickCard
-            icon={<Dumbbell className="size-5 text-primary" />}
+            icon={<Dumbbell className="size-4 text-primary" />}
             title={t("运动")}
             latest={latest("exercise") ? t("{n} 分钟", { n: latest("exercise")!.value }) : t("暂无记录")}
             latestDate={latest("exercise")?.timestamp.slice(0, 10)}
@@ -269,12 +269,14 @@ function QuickCard({
 
   return (
     <div className="kt-card p-4">
-      <p className="flex items-center gap-2 text-[16px] font-semibold">
+      <p className="kt-eyebrow flex items-center gap-1.5">
         {icon}
         {title}
       </p>
-      <p className="kt-num mt-2 text-[22px] font-semibold">{latest}</p>
-      <p className="text-[13px] text-muted-foreground">{latestDate ? t("最近记录 {date}", { date: latestDate }) : "\u00a0"}</p>
+      <p className="kt-num mt-2.5 text-[24px] font-semibold leading-none">{latest}</p>
+      <p className="mt-2 border-t border-border pt-2 text-[13px] text-muted-foreground">
+        {latestDate ? t("最近记录 {date}", { date: latestDate }) : "\u00a0"}
+      </p>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button variant="outline" className="mt-3 h-11 w-full gap-1.5 text-[15px]">
