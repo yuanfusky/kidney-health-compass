@@ -80,7 +80,7 @@ export function MetricChart({
   return (
     <div style={{ height }} className="w-full">
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart
+        <ComposedChart
           data={rows}
           margin={{ top: 12, right: 16, bottom: 4, left: -12 }}
           onClick={(state) => {
@@ -93,7 +93,14 @@ export function MetricChart({
             }
           }}
         >
-          <CartesianGrid stroke="var(--color-border)" strokeDasharray="3 3" vertical={false} />
+          <defs>
+            <linearGradient id="ktAreaFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={series[0]?.color ?? "var(--color-chart-1)"} stopOpacity={0.18} />
+              <stop offset="100%" stopColor={series[0]?.color ?? "var(--color-chart-1)"} stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid stroke="var(--color-border)" strokeOpacity={0.6} vertical={false} />
+
           <XAxis
             dataKey="date"
             tickFormatter={shortDate}
