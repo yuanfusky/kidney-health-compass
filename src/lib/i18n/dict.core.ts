@@ -138,6 +138,15 @@ export const CORE_DICT: Record<string, string> = {
   "1块 (100g)": "1 block (100 g)",
   "1杯 (250ml)": "1 cup (250 ml)",
 
+  // ---- remaining demo values / shared wording
+  "复诊准备": "Visit preparation",
+  "李医生 (肾内科)": "Dr. Li (Nephrology)",
+  "张医生 (心内科)": "Dr. Zhang (Cardiology)",
+  "光镜及免疫荧光提示 IgA 沉积（示例数据）":
+    "Light microscopy and immunofluorescence show IgA deposition (demo data)",
+  "您的健康数据属于您本人，未经授权不会与第三方共享。家属权限可以随时调整或撤回。":
+    "Your health data belongs to you and is never shared with third parties without your permission. Family access can be changed or withdrawn at any time.",
+
   // ---- language switcher
   "界面语言": "Interface language",
   "检验项目的英文名称在两种语言下都会保留。":
