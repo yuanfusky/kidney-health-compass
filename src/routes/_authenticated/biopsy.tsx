@@ -132,7 +132,7 @@ function BiopsyPage() {
               ))}
             </ul>
 
-            {b.notes ? <p className="mt-4 text-[15px] text-muted-foreground">{t("备注：{notes}", { notes: b.notes })}</p> : null}
+            {b.notes ? <p className="mt-4 text-[15px] text-muted-foreground">{t("备注：{notes}", { notes: t(b.notes) })}</p> : null}
           </section>
         ))}
 
