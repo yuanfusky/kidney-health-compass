@@ -81,7 +81,7 @@ function ChangeBadge({ diff, unit, decimals }: { diff: number | null; unit: stri
   const Icon = up ? ArrowUpRight : ArrowDownRight;
   return (
     <span
-      className="kt-num inline-flex items-center gap-0.5 rounded-md bg-surface px-1.5 py-0.5 text-[11px] font-semibold text-surface-foreground"
+      className="kt-num inline-flex shrink-0 items-center gap-0.5 rounded-md bg-surface px-1.5 py-0.5 text-[11px] font-semibold text-surface-foreground"
       title={t("{value} {unit} 较上次", { value: `${up ? "+" : ""}${rounded}`, unit })}
     >
       <Icon className="size-3" />
