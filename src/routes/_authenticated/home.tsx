@@ -58,8 +58,11 @@ function ChangeBadge({ diff, unit, decimals }: { diff: number | null; unit: stri
   const t = useT();
   if (diff === null) {
     return (
-      <span className="rounded-md bg-muted px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground">
-        {t("暂无对比")}
+      <span
+        className="shrink-0 rounded-md bg-muted px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground"
+        title={t("暂无对比")}
+      >
+        —
       </span>
     );
   }
@@ -67,11 +70,10 @@ function ChangeBadge({ diff, unit, decimals }: { diff: number | null; unit: stri
   if (rounded === 0) {
     return (
       <span
-        className="inline-flex items-center gap-0.5 rounded-md bg-muted px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground"
+        className="inline-flex shrink-0 items-center rounded-md bg-muted px-1.5 py-1 text-muted-foreground"
         title={t("与上次相同")}
       >
         <Minus className="size-3" />
-        {t("与上次相同")}
       </span>
     );
   }
