@@ -197,7 +197,7 @@ function TrendsPage() {
                 <li key={s.metric.key} className="flex items-center gap-2 text-[15px]">
                   <span className="size-2.5 rounded-full" style={{ background: s.color }} />
                   <span className="font-medium">
-                    {t(s.metric.labelZh)} {s.metric.canonical}
+                    {metricLabel(s.metric)}
                   </span>
                   <span className="kt-num ml-auto text-muted-foreground">
                     {previous ? `${previous.value.toFixed(d)} → ` : ""}

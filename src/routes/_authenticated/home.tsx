@@ -142,7 +142,7 @@ function HomePage() {
           {cards.map(({ metric, latest, extra, diff }) => (
             <div key={metric.key} className="kt-card p-4">
               <p className="text-[14px] font-medium text-muted-foreground">
-                {metric.key === "sbp" ? t("血压 Blood Pressure") : `${t(metric.labelZh.split(" ")[0] ?? "")} ${metric.canonical}`}
+                {metric.key === "sbp" ? t("血压 Blood Pressure") : metricLabel(metric)}
               </p>
               <p className="kt-num mt-2 text-[28px] font-semibold leading-none">
                 {latest ? latest.value.toFixed(metric.decimals ?? 0) : "—"}
