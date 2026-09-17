@@ -135,7 +135,7 @@ function TrendsPage() {
                         : "border-border text-muted-foreground hover:bg-muted/50"
                     }`}
                   >
-                    {t(m.labelZh.split(" ")[0] ?? "")}
+                    {t(m.labelZh)}
                   </button>
                 ))}
               </div>
@@ -163,7 +163,7 @@ function TrendsPage() {
                         : "border-border text-muted-foreground hover:bg-muted/50"
                     }`}
                   >
-                    {t(m.labelZh.split(" ")[0] ?? "")}
+                    {t(m.labelZh)}
                   </button>
                 ))}
               </div>
