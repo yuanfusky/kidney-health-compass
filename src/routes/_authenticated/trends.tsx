@@ -4,7 +4,7 @@ import { Pill } from "lucide-react";
 import { PageHeader } from "@/components/kt/PageHeader";
 import { t, useT } from "@/lib/i18n";
 import { MetricChart, type ChartSeries, type ChartMarker } from "@/components/kt/MetricChart";
-import { METRICS, METRIC_CATEGORIES } from "@/lib/kt/metrics";
+import { METRICS, METRIC_CATEGORIES, metricLabel } from "@/lib/kt/metrics";
 import {
   buildSeries,
   filterByRange,
@@ -197,7 +197,7 @@ function TrendsPage() {
                 <li key={s.metric.key} className="flex items-center gap-2 text-[15px]">
                   <span className="size-2.5 rounded-full" style={{ background: s.color }} />
                   <span className="font-medium">
-                    {t(s.metric.labelZh)} {s.metric.canonical}
+                    {metricLabel(s.metric)}
                   </span>
                   <span className="kt-num ml-auto text-muted-foreground">
                     {previous ? `${previous.value.toFixed(d)} → ` : ""}
