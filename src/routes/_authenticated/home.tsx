@@ -233,19 +233,26 @@ function HomePage() {
               return (
                 <li key={e.id} className="flex gap-3">
                   <div className="flex flex-col items-center">
-                    <span className="grid size-9 shrink-0 place-items-center rounded-full bg-accent text-accent-foreground">
-                      <Icon className="size-4.5" strokeWidth={1.8} />
+                    <span
+                      className={`z-10 grid size-8 shrink-0 place-items-center rounded-full ring-4 ring-card ${
+                        idx === 0 ? "bg-accent text-accent-foreground" : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      <Icon className="size-4" strokeWidth={1.8} />
                     </span>
-                    {idx < Math.min(arr.length, 8) - 1 ? <span className="w-px flex-1 bg-border" /> : null}
-                  </div>
-                  <div className="pb-5">
-                    <p className="kt-num text-[13px] text-muted-foreground">{e.date}</p>
-                    <p className="text-[16px] font-medium">{t(e.title)}</p>
-                    {e.description ? (
-                      <p className="text-[15px] text-muted-foreground">{t(e.description)}</p>
+                    {idx < Math.min(arr.length, 8) - 1 ? (
+                      <span className="-mt-1 w-px flex-1 bg-border/70" />
                     ) : null}
                   </div>
+                  <div className="pb-5">
+                    <p className="text-[16px] font-semibold">{t(e.title)}</p>
+                    {e.description ? (
+                      <p className="mt-0.5 text-[15px] text-muted-foreground">{t(e.description)}</p>
+                    ) : null}
+                    <p className="kt-num mt-1 text-[12px] font-medium text-muted-foreground">{e.date}</p>
+                  </div>
                 </li>
+
               );
             })}
           </ol>
