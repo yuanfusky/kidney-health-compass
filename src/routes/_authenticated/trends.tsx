@@ -4,7 +4,7 @@ import { Pill } from "lucide-react";
 import { PageHeader } from "@/components/kt/PageHeader";
 import { t, useT } from "@/lib/i18n";
 import { MetricChart, type ChartSeries, type ChartMarker } from "@/components/kt/MetricChart";
-import { METRICS, METRIC_CATEGORIES } from "@/lib/kt/metrics";
+import { METRICS, METRIC_CATEGORIES, metricLabel } from "@/lib/kt/metrics";
 import {
   buildSeries,
   filterByRange,

@@ -41,9 +41,14 @@ function mergeSeries(series: ChartSeries[]): Row[] {
   return [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date));
 }
 
+const EN_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 function shortDate(d: string) {
   const parts = d.split("-");
-  return `${(parts[0] ?? "").slice(2)}/${parts[1] ?? ""}/${parts[2] ?? ""}`;
+  const year = parts[0] ?? "";
+  const monthIdx = Number(parts[1] ?? "1") - 1;
+  if (getLang() === "zh") return `${year.slice(2)}/${parts[1] ?? ""}`;
+  return `${EN_MONTHS[monthIdx] ?? ""} ${year}`;
 }
 
 export function MetricChart({
