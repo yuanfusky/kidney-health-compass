@@ -164,6 +164,8 @@ export function MetricChart({
               connectNulls
               activeDot={false}
               legendType="none"
+              tooltipType="none"
+
             />
           ) : null}
           {series.map((s, idx) => (
