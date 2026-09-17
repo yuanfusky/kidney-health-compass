@@ -85,7 +85,7 @@ function TrendsPage() {
       <PageHeader title={t("指标趋势")} subtitle={t("选择一到两项指标叠加对比")} />
 
       <div className="mx-auto max-w-4xl space-y-5 px-4 py-5 md:px-8">
-        <div className="flex flex-wrap gap-1.5">
+        <div className="kt-segment max-w-full flex-wrap">
           {METRIC_CATEGORIES.map((c) => (
             <button
               key={c}
@@ -94,8 +94,8 @@ function TrendsPage() {
                 const first = METRICS.find((m) => m.category === c)!;
                 setPrimary(first.key);
               }}
-              className={`rounded-full px-3.5 py-2 text-[15px] font-medium transition-colors ${
-                category === c ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+              className={`rounded-full px-3.5 py-2 text-[14px] font-medium transition-colors ${
+                category === c ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"
               }`}
             >
               {t(c)}
@@ -106,13 +106,13 @@ function TrendsPage() {
         <section className="kt-card p-4 md:p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-[18px] font-semibold">{t(category)}</h2>
-            <div className="flex gap-1.5">
+            <div className="kt-segment">
               {RANGES.map((r) => (
                 <button
                   key={r.label}
                   onClick={() => setRange(r.value)}
                   className={`rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors ${
-                    range === r.value ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                    range === r.value ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"
                   }`}
                 >
                   {t(r.label)}
@@ -121,18 +121,18 @@ function TrendsPage() {
             </div>
           </div>
 
-          <div className="mt-3 space-y-2.5">
+          <div className="mt-4 space-y-3">
             <div>
-              <p className="mb-1.5 text-[14px] text-muted-foreground">{t("主指标")}</p>
+              <p className="kt-eyebrow mb-2">{t("主指标")}</p>
               <div className="flex flex-wrap gap-1.5">
                 {categoryMetrics.map((m) => (
                   <button
                     key={m.key}
                     onClick={() => setPrimary(m.key)}
-                    className={`rounded-lg border px-3 py-1.5 text-[14px] font-medium ${
+                    className={`rounded-full border px-3.5 py-1.5 text-[14px] font-medium transition-colors ${
                       primary === m.key
-                        ? "border-primary bg-accent text-accent-foreground"
-                        : "border-border text-muted-foreground"
+                        ? "border-primary/40 bg-accent text-accent-foreground"
+                        : "border-border text-muted-foreground hover:bg-muted/50"
                     }`}
                   >
                     {t(m.labelZh.split(" ")[0] ?? "")}
@@ -141,14 +141,14 @@ function TrendsPage() {
               </div>
             </div>
             <div>
-              <p className="mb-1.5 text-[14px] text-muted-foreground">{t("叠加第二项（可选）")}</p>
+              <p className="kt-eyebrow mb-2">{t("叠加第二项（可选）")}</p>
               <div className="flex flex-wrap gap-1.5">
                 <button
                   onClick={() => setSecondary(null)}
-                  className={`rounded-lg border px-3 py-1.5 text-[14px] font-medium ${
+                  className={`rounded-full border px-3.5 py-1.5 text-[14px] font-medium transition-colors ${
                     secondary === null
-                      ? "border-primary bg-accent text-accent-foreground"
-                      : "border-border text-muted-foreground"
+                      ? "border-primary/40 bg-accent text-accent-foreground"
+                      : "border-border text-muted-foreground hover:bg-muted/50"
                   }`}
                 >
                   {t("不叠加")}
@@ -157,10 +157,10 @@ function TrendsPage() {
                   <button
                     key={m.key}
                     onClick={() => setSecondary(m.key)}
-                    className={`rounded-lg border px-3 py-1.5 text-[14px] font-medium ${
+                    className={`rounded-full border px-3.5 py-1.5 text-[14px] font-medium transition-colors ${
                       secondary === m.key
-                        ? "border-primary bg-accent text-accent-foreground"
-                        : "border-border text-muted-foreground"
+                        ? "border-primary/40 bg-accent text-accent-foreground"
+                        : "border-border text-muted-foreground hover:bg-muted/50"
                     }`}
                   >
                     {t(m.labelZh.split(" ")[0] ?? "")}

@@ -177,15 +177,13 @@ function VisitsPage() {
             {t("准备下一次复诊")}
           </h2>
           <p className="mt-1.5 text-[15px] text-muted-foreground">{t("选择摘要覆盖的时间范围。")}</p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="kt-segment mt-3 max-w-full flex-wrap">
             {RANGES.map((r) => (
               <button
                 key={r.value}
                 onClick={() => setMonths(r.value)}
-                className={`rounded-lg border px-4 py-2.5 text-[15px] font-medium ${
-                  months === r.value
-                    ? "border-primary bg-accent text-accent-foreground"
-                    : "border-border text-muted-foreground"
+                className={`rounded-full px-4 py-2 text-[15px] font-medium transition-colors ${
+                  months === r.value ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"
                 }`}
               >
                 {t(r.label)}
