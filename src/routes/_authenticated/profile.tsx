@@ -5,6 +5,7 @@ import { ChevronRight, Download, Lock, LogOut, Microscope, Trash2, Users } from 
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { PageHeader } from "@/components/kt/PageHeader";
+import { LanguageToggle } from "@/components/kt/LanguageToggle";
 import {
   useBiopsies,
   useEvents,
@@ -107,6 +108,9 @@ function ProfilePage() {
             <ChevronRight className="size-5 text-muted-foreground" />
           </Link>
         </nav>
+
+        <LanguageToggle />
+
 
         <section className="kt-card p-5">
           <h2 className="flex items-center gap-2 text-[18px] font-semibold">
