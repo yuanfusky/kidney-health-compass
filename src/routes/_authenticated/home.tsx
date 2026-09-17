@@ -57,22 +57,35 @@ const EVENT_ICONS: Record<string, typeof Activity> = {
 function ChangeBadge({ diff, unit, decimals }: { diff: number | null; unit: string; decimals: number }) {
   const t = useT();
   if (diff === null) {
-    return <span className="text-[13px] text-muted-foreground">{t("暂无对比")}</span>;
+    return (
+      <span
+        className="shrink-0 rounded-md bg-muted px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground"
+        title={t("暂无对比")}
+      >
+        —
+      </span>
+    );
   }
   const rounded = Number(diff.toFixed(decimals));
   if (rounded === 0) {
     return (
-      <span className="inline-flex items-center gap-1 text-[13px] text-muted-foreground">
-        <Minus className="size-3.5" />{t("与上次相同")}
+      <span
+        className="inline-flex shrink-0 items-center rounded-md bg-muted px-1.5 py-1 text-muted-foreground"
+        title={t("与上次相同")}
+      >
+        <Minus className="size-3" />
       </span>
     );
   }
   const up = rounded > 0;
   const Icon = up ? ArrowUpRight : ArrowDownRight;
   return (
-    <span className="inline-flex items-center gap-1 text-[13px] text-surface-foreground">
-      <Icon className="size-3.5" />
-      {t("{value} {unit} 较上次", { value: `${up ? "+" : ""}${rounded}`, unit })}
+    <span
+      className="kt-num inline-flex shrink-0 items-center gap-0.5 rounded-md bg-surface px-1.5 py-0.5 text-[11px] font-semibold text-surface-foreground"
+      title={t("{value} {unit} 较上次", { value: `${up ? "+" : ""}${rounded}`, unit })}
+    >
+      <Icon className="size-3" />
+      {`${up ? "+" : ""}${rounded}`}
     </span>
   );
 }
@@ -142,18 +155,23 @@ function HomePage() {
         <section className="grid grid-cols-2 gap-3 md:grid-cols-3">
           {cards.map(({ metric, latest, extra, diff }) => (
             <div key={metric.key} className="kt-card p-4">
-              <p className="text-[14px] font-medium text-muted-foreground">
-                {metric.key === "sbp" ? t("血压 Blood Pressure") : metricLabel(metric)}
-              </p>
-              <p className="kt-num mt-2 text-[28px] font-semibold leading-none">
-                {latest ? latest.value.toFixed(metric.decimals ?? 0) : "—"}
-                {extra ? <span className="text-[20px] font-medium"> {extra}</span> : null}
-              </p>
-              <p className="mt-1 text-[13px] text-muted-foreground">
-                {metric.unit} · {latest ? latest.date : t("暂无记录")}
-              </p>
-              <div className="mt-2">
+              <div className="flex items-start justify-between gap-2">
+                <p className="kt-eyebrow leading-tight">
+                  {metric.key === "sbp" ? t("血压 Blood Pressure") : metricLabel(metric)}
+                </p>
                 <ChangeBadge diff={diff} unit={metric.unit} decimals={metric.decimals ?? 0} />
+              </div>
+              <div className="mt-3 flex flex-wrap items-baseline gap-x-1.5">
+                <span className="kt-num text-[30px] font-bold leading-none">
+                  {latest ? latest.value.toFixed(metric.decimals ?? 0) : "—"}
+                  {extra ? <span className="text-[21px] font-semibold"> {extra}</span> : null}
+                </span>
+                <span className="text-[12px] leading-tight text-muted-foreground">{metric.unit}</span>
+              </div>
+              <div className="mt-3 border-t border-border/60 pt-2">
+                <p className="kt-num text-[12px] text-muted-foreground">
+                  {latest ? latest.date : t("暂无记录")}
+                </p>
               </div>
             </div>
           ))}
@@ -162,13 +180,15 @@ function HomePage() {
         <section className="kt-card p-4 md:p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-[18px] font-semibold">{t("肾功能趋势")}</h2>
-            <div className="flex gap-1.5">
+            <div className="kt-segment">
               {RANGES.map((r) => (
                 <button
                   key={r.label}
                   onClick={() => setRange(r.value)}
-                  className={`rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors ${
-                    range === r.value ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                  className={`rounded-full px-3 py-1 text-[13px] font-semibold transition-colors ${
+                    range === r.value
+                      ? "bg-card text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   {t(r.label)}
@@ -182,16 +202,17 @@ function HomePage() {
               <button
                 key={o.key}
                 onClick={() => setMetricKey(o.key)}
-                className={`rounded-lg border px-3 py-1.5 text-[14px] font-medium transition-colors ${
+                className={`rounded-full px-3 py-1.5 text-[14px] font-medium transition-colors ${
                   metricKey === o.key
-                    ? "border-primary bg-accent text-accent-foreground"
-                    : "border-border text-muted-foreground"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted/70 text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {t(o.label)}
               </button>
             ))}
           </div>
+
 
           <div className="mt-4">
             <MetricChart
@@ -214,19 +235,26 @@ function HomePage() {
               return (
                 <li key={e.id} className="flex gap-3">
                   <div className="flex flex-col items-center">
-                    <span className="grid size-9 shrink-0 place-items-center rounded-full bg-accent text-accent-foreground">
-                      <Icon className="size-4.5" strokeWidth={1.8} />
+                    <span
+                      className={`z-10 grid size-8 shrink-0 place-items-center rounded-full ring-4 ring-card ${
+                        idx === 0 ? "bg-accent text-accent-foreground" : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      <Icon className="size-4" strokeWidth={1.8} />
                     </span>
-                    {idx < Math.min(arr.length, 8) - 1 ? <span className="w-px flex-1 bg-border" /> : null}
-                  </div>
-                  <div className="pb-5">
-                    <p className="kt-num text-[13px] text-muted-foreground">{e.date}</p>
-                    <p className="text-[16px] font-medium">{t(e.title)}</p>
-                    {e.description ? (
-                      <p className="text-[15px] text-muted-foreground">{t(e.description)}</p>
+                    {idx < Math.min(arr.length, 8) - 1 ? (
+                      <span className="-mt-1 w-px flex-1 bg-border/70" />
                     ) : null}
                   </div>
+                  <div className="pb-5">
+                    <p className="text-[16px] font-semibold">{t(e.title)}</p>
+                    {e.description ? (
+                      <p className="mt-0.5 text-[15px] text-muted-foreground">{t(e.description)}</p>
+                    ) : null}
+                    <p className="kt-num mt-1 text-[12px] font-medium text-muted-foreground">{e.date}</p>
+                  </div>
                 </li>
+
               );
             })}
           </ol>
